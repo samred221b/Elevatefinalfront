@@ -1,0 +1,68 @@
+import { Badge } from '@/types'
+
+export const AVAILABLE_BADGES: Badge[] = [
+  {
+    id: 'streak-7',
+    name: 'Week Warrior',
+    description: 'Complete a 7-day streak',
+    icon: '🔥',
+    type: 'streak',
+    requirement: 7,
+  },
+  {
+    id: 'streak-30',
+    name: 'Monthly Master',
+    description: 'Complete a 30-day streak',
+    icon: '⭐',
+    type: 'streak',
+    requirement: 30,
+  },
+  {
+    id: 'streak-100',
+    name: 'Century Champion',
+    description: 'Complete a 100-day streak',
+    icon: '👑',
+    type: 'streak',
+    requirement: 100,
+  },
+  {
+    id: 'category-10',
+    name: 'Category Crusher',
+    description: 'Complete 10 habits in a category',
+    icon: '💪',
+    type: 'category',
+    requirement: 10,
+  },
+  {
+    id: 'category-50',
+    name: 'Category Legend',
+    description: 'Complete 50 habits in a category',
+    icon: '🏆',
+    type: 'category',
+    requirement: 50,
+  },
+  {
+    id: 'total-50',
+    name: 'Habit Hero',
+    description: 'Complete 50 total habits',
+    icon: '🌟',
+    type: 'total',
+    requirement: 50,
+  },
+  {
+    id: 'total-100',
+    name: 'Consistency King',
+    description: 'Complete 100 total habits',
+    icon: '💎',
+    type: 'total',
+    requirement: 100,
+  },
+  {
+    id: 'total-500',
+    name: 'Legendary',
+    description: 'Complete 500 total habits',
+    icon: '🎖️',
+    type: 'total',
+    requirement: 500,
+  },
+]
