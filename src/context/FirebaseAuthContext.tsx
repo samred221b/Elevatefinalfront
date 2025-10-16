@@ -46,7 +46,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [logoutLoading, setLogoutLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [isSigningUp, setIsSigningUp] = useState(false)
-  const [silentSignOut, setSilentSignOut] = useState(false)
+  const [checkingVerification, setCheckingVerification] = useState(false)
 
   // Sign up function
   const signup = async (email: string, password: string, displayName: string) => {
@@ -83,24 +83,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       setLoginLoading(true)
       console.log('🔐 Attempting Firebase login for:', email)
+      
+      // Block auth state updates during verification check
+      setCheckingVerification(true)
       const result = await signInWithEmailAndPassword(auth, email, password)
       
       // Check if email is verified
       if (!result.user.emailVerified) {
         console.warn('⚠️ Email not verified for:', email)
-        // Silent sign out - no logout animation
-        setSilentSignOut(true)
+        // Sign out unverified user (auth listener won't react)
         await signOut(auth)
-        setSilentSignOut(false)
+        setCheckingVerification(false)
         throw new Error('Please verify your account. Check your email inbox for the verification link.')
       }
       
+      // User is verified, allow auth state updates
+      setCheckingVerification(false)
       console.log('✅ Firebase login successful:', result.user.uid)
     } catch (error) {
       console.error('❌ Firebase login error:', error)
       const authError = error as AuthError
       console.error('❌ Error code:', authError.code)
       console.error('❌ Error message:', authError.message)
+      
+      // Make sure we unblock auth updates
+      setCheckingVerification(false)
       
       // If it's our custom verification error, throw it as is
       if (error instanceof Error && error.message.includes('verify your')) {
@@ -190,9 +197,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return // Don't update anything
       }
       
-      // Ignore auth changes during silent sign out (verification errors)
-      if (silentSignOut) {
-        console.log('🤫 Ignoring auth change during silent sign out')
+      // Ignore auth changes during verification check (prevents flash)
+      if (checkingVerification) {
+        console.log('🔍 Ignoring auth change during verification check')
         return // Don't update anything
       }
       
@@ -214,7 +221,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
 
     return unsubscribe
-  }, [currentUser, loginLoading, isSigningUp, silentSignOut])
+  }, [currentUser, loginLoading, isSigningUp, checkingVerification])
 
   const value = {
     currentUser,
