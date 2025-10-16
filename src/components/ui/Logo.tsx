@@ -31,12 +31,12 @@ export function Logo({ size = 'md', className = '', showFallback = true }: LogoP
     setImageError(false);
   };
 
-  // Try multiple potential paths
+  // Try multiple potential paths for Railway deployment
   const logoSources = [
     '/Elevate.png',
-    './Elevate.png',
-    '/public/Elevate.png',
-    '/Logo.png'
+    '/Logo.png',
+    '/Elevate%201.png',
+    './Elevate.png'
   ];
 
   const [currentSourceIndex, setCurrentSourceIndex] = useState(0);

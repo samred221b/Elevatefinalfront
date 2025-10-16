@@ -3,6 +3,7 @@ import { useAuth } from '@/context/FirebaseAuthContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { Logo } from '@/components/ui/Logo'
 import { Eye, EyeOff, LogIn, AlertCircle } from 'lucide-react'
 
 interface LoginFormProps {
@@ -79,6 +80,9 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
           
           {/* Desktop Header */}
           <div className="hidden lg:block">
+            <div className="flex items-center justify-center mb-4">
+              <Logo size="xl" />
+            </div>
             <CardTitle className="text-2xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-1">
               Welcome Back
             </CardTitle>
