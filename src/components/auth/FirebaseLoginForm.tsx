@@ -57,7 +57,7 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
       <div className="absolute -top-2 -right-6 w-6 h-6 bg-gradient-to-br from-blue-400/20 to-cyan-500/20 rounded-full blur-sm"></div>
       <div className="absolute -bottom-6 -left-2 w-10 h-10 bg-gradient-to-br from-pink-400/20 to-fuchsia-500/20 rounded-full blur-sm"></div>
       
-      <Card className="relative w-full border-0 shadow-2xl bg-gradient-to-br from-white/95 via-white/90 to-blue-50/95 dark:from-gray-900/95 dark:via-gray-800/90 dark:to-slate-900/95 backdrop-blur-xl border border-white/60 dark:border-gray-700/60 overflow-hidden">
+      <Card className="relative w-full min-h-[600px] border-0 shadow-2xl bg-gradient-to-br from-white/95 via-white/90 to-blue-50/95 dark:from-gray-900/95 dark:via-gray-800/90 dark:to-slate-900/95 backdrop-blur-xl border border-white/60 dark:border-gray-700/60 overflow-hidden">
         {/* Subtle Pattern Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-blue-500/5 opacity-50"></div>
         
