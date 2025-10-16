@@ -91,13 +91,15 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
       
       <CardContent className="relative z-10 px-8 py-6">
         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-          {/* Error Message */}
-          {error && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
-              <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
-              <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
-            </div>
-          )}
+          {/* Error Message - Fixed height to prevent layout shift */}
+          <div className="min-h-[52px]">
+            {error && (
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0" />
+                <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
+              </div>
+            )}
+          </div>
 
           {/* Email Field */}
           <div className="space-y-2">
