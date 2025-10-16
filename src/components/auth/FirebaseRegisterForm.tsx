@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '@/context/FirebaseAuthContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Eye, EyeOff, Mail, Lock, User, UserPlus, AlertCircle, CheckCircle } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { EmailVerificationScreen } from './EmailVerificationScreen'
+import { Eye, EyeOff, UserPlus, AlertCircle, User, Mail, Lock, CheckCircle } from 'lucide-react'
 
 interface RegisterFormProps {
   onSwitchToLogin: () => void
@@ -20,6 +22,7 @@ export function FirebaseRegisterForm({ onSwitchToLogin }: RegisterFormProps) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,6 +48,7 @@ export function FirebaseRegisterForm({ onSwitchToLogin }: RegisterFormProps) {
 
     try {
       await signup(formData.email, formData.password, formData.displayName.trim())
+      setSuccess(true)
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Registration failed')
     } finally {
@@ -70,6 +74,11 @@ export function FirebaseRegisterForm({ onSwitchToLogin }: RegisterFormProps) {
   }
 
   const passwordStrength = getPasswordStrength(formData.password)
+
+  // Show verification screen after successful registration
+  if (success) {
+    return <EmailVerificationScreen email={formData.email} onBackToLogin={onSwitchToLogin} />
+  }
 
   return (
     <Card className="w-full max-w-md mx-auto border-0 shadow-2xl bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
