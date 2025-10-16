@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useAuth } from '@/context/FirebaseAuthContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import { EmailVerificationScreen } from './EmailVerificationScreen'
 import { Eye, EyeOff, UserPlus, AlertCircle, User, Mail, Lock, CheckCircle } from 'lucide-react'
 
