@@ -1,4 +1,3 @@
-import React from 'react'
 import { HabitProvider } from './context/HabitContext'
 import { ToastProvider } from './context/ToastContext'
 

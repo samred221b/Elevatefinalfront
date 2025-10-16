@@ -19,7 +19,7 @@ import { TopNav } from './components/navigation/TopNav';
 import { FloatingActionMenu } from './components/navigation/FloatingActionMenu';
 import { Breadcrumb } from './components/navigation/Breadcrumb';
 
-type View = 'home' | 'templates' | 'analytics' | 'calendar' | 'profile' | 'settings' | 'progress' | 'badges' | 'data';
+type View = 'home' | 'templates' | 'analytics' | 'calendar' | 'profile' | 'help' | 'faq' | 'billing' | 'settings' | 'progress' | 'badges' | 'data';
 
 function AppContent() {
   const { categories, isDataLoading } = useHabits();
@@ -88,10 +88,6 @@ function AppContent() {
     setShowHabitDialog(true);
   };
 
-  const handleQuickLog = () => {
-    // Implement quick log functionality
-    console.log('Quick log functionality');
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900 dark:to-indigo-900">
@@ -223,7 +219,6 @@ function AppContent() {
       <FloatingActionMenu
         onAddCategory={handleAddCategory}
         onAddHabit={handleAddHabit}
-        onQuickLog={handleQuickLog}
       />
 
       {/* Dialogs */}

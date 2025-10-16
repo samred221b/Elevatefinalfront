@@ -32,17 +32,7 @@ function AppContent() {
   console.log('📱 AppContent rendering...')
   const {
     categories,
-    habits,
-    logs,
-    addCategory,
-    updateCategory,
     deleteCategory,
-    reorderCategories,
-    addHabit,
-    updateHabit,
-    deleteHabit,
-    reorderHabits,
-    toggleHabit,
     getHabitsByCategory,
     refreshData,
     isDataLoading

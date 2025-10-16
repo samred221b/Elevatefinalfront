@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
 // Initialize Analytics (optional)
-const analytics = getAnalytics(app);
+export const analytics = getAnalytics(app);
 
 // Debug Firebase initialization
 console.log('🔥 Firebase initialized successfully');
