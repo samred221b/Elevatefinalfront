@@ -374,6 +374,8 @@ export function HabitProvider({ children }: { children: ReactNode }) {
 
   const addHabit = async (habit: Omit<Habit, 'id' | 'createdAt' | 'order'>) => {
     try {
+      console.log('🎯 HabitContext: addHabit called with:', habit);
+      
       const habitData: CreateHabitData = {
         name: habit.name,
         description: habit.description,
@@ -387,13 +389,19 @@ export function HabitProvider({ children }: { children: ReactNode }) {
         },
       };
 
+      console.log('📡 HabitContext: Calling habitService.createHabit with:', habitData);
       const response = await habitService.createHabit(habitData);
+      console.log('📡 HabitContext: API response:', response);
+      
       if (response.success && response.data) {
         const newHabit = convertBackendHabit(response.data);
         setHabits(prev => [...prev, newHabit]);
+        console.log('✅ HabitContext: Habit added successfully:', newHabit);
+      } else {
+        console.error('❌ HabitContext: API response not successful:', response);
       }
     } catch (error) {
-      console.error('Error adding habit:', error);
+      console.error('❌ HabitContext: Error adding habit:', error);
       throw error;
     }
   };

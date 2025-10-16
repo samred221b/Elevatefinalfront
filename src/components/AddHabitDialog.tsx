@@ -76,7 +76,10 @@ export function AddHabitDialog({ open, onOpenChange, categoryId, editHabit }: Ad
     if (editHabit) {
       updateHabit(editHabit.id, habitData)
     } else {
-      addHabit(habitData)
+      console.log('🎯 AddHabitDialog: Calling addHabit with data:', habitData)
+      addHabit(habitData).catch(error => {
+        console.error('❌ AddHabitDialog: Failed to add habit:', error)
+      })
     }
 
     onOpenChange(false)
