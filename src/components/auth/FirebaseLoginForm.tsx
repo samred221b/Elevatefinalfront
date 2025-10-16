@@ -51,13 +51,12 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
   }
 
   return (
-    <div className="relative w-full max-w-xl mx-auto">
-      {/* Modern Decorative Elements */}
-      <div className="absolute -top-6 -left-6 w-12 h-12 bg-gradient-to-br from-violet-500/30 to-purple-600/30 rounded-2xl blur-xl animate-pulse"></div>
-      <div className="absolute -top-4 -right-8 w-10 h-10 bg-gradient-to-br from-blue-500/25 to-cyan-500/25 rounded-full blur-lg"></div>
-      <div className="absolute -bottom-8 -left-4 w-14 h-14 bg-gradient-to-br from-pink-500/20 to-fuchsia-600/20 rounded-3xl blur-2xl"></div>
+    <div className="relative w-full max-w-md mx-auto">
+      {/* Elegant Minimal Decorative Elements */}
+      <div className="absolute -top-3 -left-3 w-20 h-20 bg-gradient-to-br from-violet-400/20 to-purple-500/20 rounded-full blur-2xl"></div>
+      <div className="absolute -bottom-3 -right-3 w-24 h-24 bg-gradient-to-tl from-blue-400/15 to-indigo-500/15 rounded-full blur-2xl"></div>
       
-      <Card className="relative w-full min-h-[600px] border shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] bg-gradient-to-br from-white via-white to-violet-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-violet-950/30 backdrop-blur-xl border-violet-100/50 dark:border-violet-900/50 overflow-hidden rounded-2xl">
+      <Card className="relative w-full border-0 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)] bg-white/95 dark:bg-gray-900/95 backdrop-blur-2xl overflow-hidden rounded-3xl">
         {/* Subtle Pattern Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-blue-500/5 opacity-50"></div>
         
