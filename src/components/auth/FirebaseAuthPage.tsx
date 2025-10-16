@@ -53,15 +53,6 @@ export function FirebaseAuthPage() {
         <div className="relative z-10 flex flex-col justify-center px-8 py-8 text-white h-full max-w-none">
           {/* Hero Section - Clean Layout */}
           <div className="mb-10">
-            {/* Clean Logo */}
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-sm rounded-3xl shadow-xl border border-white/10 mb-6">
-              <img 
-                src="/Elevate.png" 
-                alt="Elevate Logo" 
-                className="w-12 h-12 object-contain drop-shadow-sm"
-              />
-            </div>
-            
             {/* Elegant Title */}
             <h1 className="text-6xl font-black mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
               Elevate
