@@ -64,15 +64,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await signOut(auth)
       console.log('🔐 User signed out - awaiting email verification')
       
-      // Ensure we don't trigger login success for signup
-      setCurrentUser(null)
-      setLoginSuccess(false)
     } catch (error) {
       const authError = error as AuthError
       throw new Error(getErrorMessage(authError.code))
     } finally {
+      // Reset all state after signup completes
       setIsSigningUp(false)
       setLoginLoading(false)
+      setLoginSuccess(false)
+      setCurrentUser(null) // Ensure user stays on auth page
+      setLoading(false)
     }
   }
 
@@ -179,16 +180,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       console.log('🔥 Auth state changed:', user ? `User: ${user.email}` : 'No user')
       
-      // Don't trigger login success during signup process
+      // Completely ignore ALL auth changes during signup - don't update any state
       if (isSigningUp) {
-        console.log('🔄 Ignoring auth change during signup')
-        setCurrentUser(user)
-        setLoading(false)
-        return
+        console.log('🚫 Completely ignoring auth change during signup')
+        return // Don't update anything
       }
       
       // If user just logged in successfully (not during signup)
-      if (user && !currentUser && loginLoading && !isSigningUp) {
+      if (user && !currentUser && loginLoading) {
         console.log('✅ Successful login detected')
         setLoginSuccess(true)
         // Clear login success after a short delay to show the app
