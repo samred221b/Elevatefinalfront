@@ -3,7 +3,6 @@ import { useAuth } from '@/context/FirebaseAuthContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Logo } from '@/components/ui/Logo'
 import { Eye, EyeOff, LogIn, AlertCircle } from 'lucide-react'
 
 interface LoginFormProps {
@@ -80,19 +79,16 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
           
           {/* Desktop Header */}
           <div className="hidden lg:block">
-            <div className="flex items-center justify-center mb-4">
-              <Logo size="xl" />
-            </div>
             <CardTitle className="text-2xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-1">
               Welcome Back
             </CardTitle>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-0">
               Ready to continue building better habits?
             </p>
           </div>
         </CardHeader>
       
-      <CardContent className="relative z-10 px-8 pt-2 pb-6">
+      <CardContent className="relative z-10 px-8 pt-1 pb-6">
         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
           {/* Error Message - Fixed height to prevent layout shift */}
           <div className="min-h-[52px]">

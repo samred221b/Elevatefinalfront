@@ -69,8 +69,10 @@ export function Logo({ size = 'md', className = '', showFallback = true }: LogoP
         ) : null}
         
         {(imageError || !imageLoaded) && showFallback && (
-          <div className={`bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold ${fallbackTextSizes[size]} flex items-center justify-center w-4/5 h-4/5 rounded`}>
-            E
+          <div className={`bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-600 text-white font-black ${fallbackTextSizes[size]} flex items-center justify-center w-4/5 h-4/5 rounded-xl shadow-lg relative overflow-hidden`}>
+            {/* Subtle shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent rounded-xl"></div>
+            <span className="relative z-10 tracking-tight">E</span>
           </div>
         )}
       </div>
