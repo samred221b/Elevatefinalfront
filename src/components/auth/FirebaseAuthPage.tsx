@@ -305,7 +305,7 @@ export function FirebaseAuthPage() {
         
         {/* Content Container */}
         <div className="relative z-10 flex items-center justify-center min-h-full">
-          <div className="w-full max-w-2xl px-8 lg:px-16">
+          <div className="w-full max-w-3xl px-8 lg:px-16">
             {/* Auth Form - Centered */}
             <div className="flex items-center justify-center min-h-full">
               {renderAuthForm()}
