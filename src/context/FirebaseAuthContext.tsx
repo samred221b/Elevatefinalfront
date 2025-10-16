@@ -46,6 +46,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [logoutLoading, setLogoutLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [isSigningUp, setIsSigningUp] = useState(false)
+  const [silentSignOut, setSilentSignOut] = useState(false)
 
   // Sign up function
   const signup = async (email: string, password: string, displayName: string) => {
@@ -87,8 +88,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // Check if email is verified
       if (!result.user.emailVerified) {
         console.warn('⚠️ Email not verified for:', email)
-        await signOut(auth) // Sign out unverified user
-        throw new Error('Please verify your email before logging in. Check your inbox for the verification link.')
+        // Silent sign out - no logout animation
+        setSilentSignOut(true)
+        await signOut(auth)
+        setSilentSignOut(false)
+        throw new Error('Please verify your account. Check your email inbox for the verification link.')
       }
       
       console.log('✅ Firebase login successful:', result.user.uid)
@@ -99,7 +103,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.error('❌ Error message:', authError.message)
       
       // If it's our custom verification error, throw it as is
-      if (error instanceof Error && error.message.includes('verify your email')) {
+      if (error instanceof Error && error.message.includes('verify your')) {
         throw error
       }
       
@@ -186,6 +190,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return // Don't update anything
       }
       
+      // Ignore auth changes during silent sign out (verification errors)
+      if (silentSignOut) {
+        console.log('🤫 Ignoring auth change during silent sign out')
+        return // Don't update anything
+      }
+      
       // If user just logged in successfully (not during signup)
       if (user && !currentUser && loginLoading) {
         console.log('✅ Successful login detected')
@@ -204,7 +214,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
 
     return unsubscribe
-  }, [currentUser, loginLoading, isSigningUp])
+  }, [currentUser, loginLoading, isSigningUp, silentSignOut])
 
   const value = {
     currentUser,
