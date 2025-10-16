@@ -45,10 +45,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loginLoading, setLoginLoading] = useState(false)
   const [logoutLoading, setLogoutLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
+  const [isSigningUp, setIsSigningUp] = useState(false)
 
   // Sign up function
   const signup = async (email: string, password: string, displayName: string) => {
     try {
+      setIsSigningUp(true)
       setLoginLoading(true)
       const result = await createUserWithEmailAndPassword(auth, email, password)
       // Update the user's display name
@@ -58,15 +60,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await sendEmailVerification(result.user)
       console.log('📧 Verification email sent to:', email)
       
-      // Sign out the user until they verify their email
+      // Immediately sign out the user to prevent home page navigation
       await signOut(auth)
       console.log('🔐 User signed out - awaiting email verification')
       
-      // Don't set currentUser since we signed them out
+      // Ensure we don't trigger login success for signup
+      setCurrentUser(null)
+      setLoginSuccess(false)
     } catch (error) {
       const authError = error as AuthError
       throw new Error(getErrorMessage(authError.code))
     } finally {
+      setIsSigningUp(false)
       setLoginLoading(false)
     }
   }
@@ -174,8 +179,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       console.log('🔥 Auth state changed:', user ? `User: ${user.email}` : 'No user')
       
-      // If user just logged in successfully
-      if (user && !currentUser && loginLoading) {
+      // Don't trigger login success during signup process
+      if (isSigningUp) {
+        console.log('🔄 Ignoring auth change during signup')
+        setCurrentUser(user)
+        setLoading(false)
+        return
+      }
+      
+      // If user just logged in successfully (not during signup)
+      if (user && !currentUser && loginLoading && !isSigningUp) {
         console.log('✅ Successful login detected')
         setLoginSuccess(true)
         // Clear login success after a short delay to show the app
@@ -192,7 +205,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     })
 
     return unsubscribe
-  }, [currentUser, loginLoading])
+  }, [currentUser, loginLoading, isSigningUp])
 
   const value = {
     currentUser,
