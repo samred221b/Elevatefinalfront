@@ -16,16 +16,16 @@ export function FirebaseAuthPage() {
     // Small delay to ensure DOM is ready, then trigger animation
     const timer = setTimeout(() => {
       setIsAnimating(true)
-    }, 50)
+    }, 100)
     return () => clearTimeout(timer)
   }, [])
 
-  // Re-trigger animation when view changes
+  // Re-trigger animation when view changes with bounce effect
   useEffect(() => {
     setIsAnimating(false)
     const timer = setTimeout(() => {
       setIsAnimating(true)
-    }, 50)
+    }, 100)
     return () => clearTimeout(timer)
   }, [currentView])
 
@@ -69,9 +69,9 @@ export function FirebaseAuthPage() {
   return (
     <div className="h-screen flex overflow-hidden bg-gray-50 dark:bg-gray-900">
       {/* Left Side - Elegant Modern Showcase */}
-      <div className={`hidden lg:flex lg:w-3/5 relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 transition-all duration-1000 ${
-        isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'
-      }`}>
+      <div className={`hidden lg:flex lg:w-3/5 relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 transition-all duration-1400 ${
+        isAnimating ? 'opacity-100 translate-x-0 rotate-0 scale-100' : 'opacity-0 -translate-x-32 -rotate-6 scale-90'
+      }`} style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
         {/* Subtle Static Background Elements */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-purple-600/30 to-violet-600/20"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
@@ -86,9 +86,9 @@ export function FirebaseAuthPage() {
         {/* Content Container - Full Width Usage */}
         <div className="relative z-10 flex flex-col justify-center px-8 py-8 text-white h-full max-w-none">
           {/* Hero Section - Clean Layout */}
-          <div className={`mb-10 transition-all duration-700 delay-200 ${
-            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}>
+          <div className={`mb-10 transition-all duration-1200 delay-400 ${
+            isAnimating ? 'opacity-100 translate-y-0 scale-100 rotate-0' : 'opacity-0 translate-y-16 scale-80 rotate-3'
+          }`} style={{ transitionTimingFunction: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)' }}>
             {/* Elegant Title */}
             <h1 className="text-6xl font-black mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
               Elevate
@@ -99,9 +99,9 @@ export function FirebaseAuthPage() {
           </div>
 
           {/* Features Section - Moderately Taller Cards */}
-          <div className={`grid grid-cols-2 gap-4 mb-8 transition-all duration-700 delay-400 ${
-            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}>
+          <div className={`grid grid-cols-2 gap-4 mb-8 transition-all duration-1000 delay-600 ${
+            isAnimating ? 'opacity-100 translate-x-0 translate-y-0 scale-100' : 'opacity-0 -translate-x-12 translate-y-8 scale-85'
+          }`} style={{ transitionTimingFunction: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
             {/* Smart Analytics - Advanced */}
             <div className="relative overflow-hidden p-5 bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-xl border border-white/20 hover:border-blue-400/30 hover:bg-white/15 transition-all duration-500 group">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -252,8 +252,8 @@ export function FirebaseAuthPage() {
           </div>
 
           {/* Stats Section - Tight Fit */}
-          <div className={`flex justify-center gap-6 mb-6 transition-all duration-700 delay-500 ${
-            isAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          <div className={`flex justify-center gap-6 mb-6 transition-all duration-800 delay-700 ease-out ${
+            isAnimating ? 'opacity-100 translate-y-0 scale-100 rotate-0' : 'opacity-0 translate-y-10 scale-90 rotate-2'
           }`}>
             <div className="text-center px-3 py-2">
               <div className="text-xl font-black bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">50K+</div>
@@ -273,8 +273,8 @@ export function FirebaseAuthPage() {
           </div>
 
           {/* Bottom CTA Section */}
-          <div className={`text-center transition-all duration-700 delay-600 ${
-            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          <div className={`text-center transition-all duration-600 delay-900 ease-out ${
+            isAnimating ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
           }`}>
             <p className="text-white/60 text-sm">
               Join thousands of users who have transformed their lives with Elevate
@@ -284,9 +284,9 @@ export function FirebaseAuthPage() {
       </div>
 
       {/* Right Side - Ultra Creative Artistic Background */}
-      <div className={`w-full lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 transition-all duration-1000 ${
-        isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
-      }`}>
+      <div className={`w-full lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 transition-all duration-1500 ${
+        isAnimating ? 'opacity-100 translate-x-0 scale-100 rotate-0' : 'opacity-0 translate-x-24 scale-110 rotate-4'
+      }`} style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}>
         {/* Sophisticated Multi-layered Background Design */}
         <div className="absolute inset-0">
           {/* Primary Artistic Gradients */}
@@ -342,15 +342,15 @@ export function FirebaseAuthPage() {
         <div className="relative z-10 flex items-center justify-center min-h-full">
           <div className="w-full max-w-4xl px-8 lg:px-16">
             {/* Auth Form - Centered */}
-            <div className={`flex items-center justify-center min-h-full transition-all duration-700 delay-300 ${
-              isAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-            }`}>
+            <div className={`flex items-center justify-center min-h-full transition-all duration-1300 delay-500 ${
+              isAnimating ? 'opacity-100 scale-100 translate-y-0 rotate-0' : 'opacity-0 scale-75 translate-y-12 -rotate-2'
+            }`} style={{ transitionTimingFunction: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)' }}>
               {renderAuthForm()}
             </div>
             
             {/* Trust Indicators */}
-            <div className={`hidden lg:flex items-center justify-center gap-8 mt-8 text-sm text-gray-500 dark:text-gray-400 transition-all duration-700 delay-500 ${
-              isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            <div className={`hidden lg:flex items-center justify-center gap-8 mt-8 text-sm text-gray-500 dark:text-gray-400 transition-all duration-800 delay-800 ease-out ${
+              isAnimating ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-6 scale-95'
             }`}>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
