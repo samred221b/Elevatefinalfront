@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { FirebaseLoginForm } from './FirebaseLoginForm'
 import { FirebaseRegisterForm } from './FirebaseRegisterForm'
 import { FirebaseForgotPasswordForm } from './FirebaseForgotPasswordForm'
+import { EmailVerificationScreen } from './EmailVerificationScreen'
 
-type AuthView = 'login' | 'register' | 'forgot-password'
+type AuthView = 'login' | 'register' | 'forgot-password' | 'verify-email'
 
 export function FirebaseAuthPage() {
   const [currentView, setCurrentView] = useState<AuthView>('login')
+  const [verificationEmail, setVerificationEmail] = useState('')
 
   const renderAuthForm = () => {
     switch (currentView) {
@@ -21,11 +23,22 @@ export function FirebaseAuthPage() {
         return (
           <FirebaseRegisterForm
             onSwitchToLogin={() => setCurrentView('login')}
+            onVerificationSent={(email) => {
+              setVerificationEmail(email)
+              setCurrentView('verify-email')
+            }}
           />
         )
       case 'forgot-password':
         return (
           <FirebaseForgotPasswordForm
+            onBackToLogin={() => setCurrentView('login')}
+          />
+        )
+      case 'verify-email':
+        return (
+          <EmailVerificationScreen
+            email={verificationEmail}
             onBackToLogin={() => setCurrentView('login')}
           />
         )
