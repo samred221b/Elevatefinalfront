@@ -20,12 +20,10 @@ export function FirebaseRegisterForm({ onSwitchToLogin }: RegisterFormProps) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    setSuccess(false)
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
@@ -47,7 +45,6 @@ export function FirebaseRegisterForm({ onSwitchToLogin }: RegisterFormProps) {
 
     try {
       await signup(formData.email, formData.password, formData.displayName.trim())
-      setSuccess(true)
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Registration failed')
     } finally {
@@ -87,35 +84,6 @@ export function FirebaseRegisterForm({ onSwitchToLogin }: RegisterFormProps) {
       
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Success Message */}
-          {success && (
-            <div className="flex flex-col gap-3 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
-                <span className="text-sm font-semibold text-green-700 dark:text-green-300">Account Created Successfully!</span>
-              </div>
-              <p className="text-sm text-green-700 dark:text-green-300 ml-7">
-                We've sent a verification email to <strong>{formData.email}</strong>. 
-                Please check your inbox and click the verification link to activate your account.
-              </p>
-              <div className="ml-7 mt-2">
-                <p className="text-xs text-green-600 dark:text-green-400 mb-2">
-                  ✉️ Check your email (including spam folder)
-                </p>
-                <p className="text-xs text-green-600 dark:text-green-400">
-                  🔗 Click the verification link in the email
-                </p>
-              </div>
-              <Button
-                type="button"
-                onClick={onSwitchToLogin}
-                className="mt-2 w-full bg-green-600 hover:bg-green-700 text-white"
-              >
-                Go to Login
-              </Button>
-            </div>
-          )}
-          
           {/* Error Message */}
           {error && (
             <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
