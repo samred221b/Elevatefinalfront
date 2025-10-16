@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FirebaseLoginForm } from './FirebaseLoginForm'
 import { FirebaseRegisterForm } from './FirebaseRegisterForm'
 import { FirebaseForgotPasswordForm } from './FirebaseForgotPasswordForm'
@@ -9,6 +9,12 @@ type AuthView = 'login' | 'register' | 'forgot-password' | 'verify-email'
 export function FirebaseAuthPage() {
   const [currentView, setCurrentView] = useState<AuthView>('login')
   const [verificationEmail, setVerificationEmail] = useState('')
+  const [isAnimating, setIsAnimating] = useState(true)
+
+  // Trigger entrance animation on mount
+  useEffect(() => {
+    setIsAnimating(true)
+  }, [])
 
   const renderAuthForm = () => {
     switch (currentView) {
@@ -48,9 +54,11 @@ export function FirebaseAuthPage() {
   }
 
   return (
-    <div className="h-screen flex overflow-hidden">
+    <div className="h-screen flex overflow-hidden bg-gray-50 dark:bg-gray-900">
       {/* Left Side - Elegant Modern Showcase */}
-      <div className="hidden lg:flex lg:w-3/5 relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className={`hidden lg:flex lg:w-3/5 relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 transition-all duration-1000 ${
+        isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'
+      }`}>
         {/* Subtle Static Background Elements */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-purple-600/30 to-violet-600/20"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
@@ -65,7 +73,9 @@ export function FirebaseAuthPage() {
         {/* Content Container - Full Width Usage */}
         <div className="relative z-10 flex flex-col justify-center px-8 py-8 text-white h-full max-w-none">
           {/* Hero Section - Clean Layout */}
-          <div className="mb-10">
+          <div className={`mb-10 transition-all duration-700 delay-200 ${
+            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}>
             {/* Elegant Title */}
             <h1 className="text-6xl font-black mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
               Elevate
@@ -76,7 +86,9 @@ export function FirebaseAuthPage() {
           </div>
 
           {/* Features Section - Moderately Taller Cards */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className={`grid grid-cols-2 gap-4 mb-8 transition-all duration-700 delay-400 ${
+            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}>
             {/* Smart Analytics - Advanced */}
             <div className="relative overflow-hidden p-5 bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-xl border border-white/20 hover:border-blue-400/30 hover:bg-white/15 transition-all duration-500 group">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -227,7 +239,9 @@ export function FirebaseAuthPage() {
           </div>
 
           {/* Stats Section - Tight Fit */}
-          <div className="flex justify-center gap-6 mb-6">
+          <div className={`flex justify-center gap-6 mb-6 transition-all duration-700 delay-500 ${
+            isAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}>
             <div className="text-center px-3 py-2">
               <div className="text-xl font-black bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">50K+</div>
               <div className="text-white/80 text-xs font-medium">Active Users</div>
@@ -246,7 +260,9 @@ export function FirebaseAuthPage() {
           </div>
 
           {/* Bottom CTA Section */}
-          <div className="text-center">
+          <div className={`text-center transition-all duration-700 delay-600 ${
+            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}>
             <p className="text-white/60 text-sm">
               Join thousands of users who have transformed their lives with Elevate
             </p>
@@ -255,7 +271,9 @@ export function FirebaseAuthPage() {
       </div>
 
       {/* Right Side - Ultra Creative Artistic Background */}
-      <div className="w-full lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900">
+      <div className={`w-full lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 transition-all duration-1000 ${
+        isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
+      }`}>
         {/* Sophisticated Multi-layered Background Design */}
         <div className="absolute inset-0">
           {/* Primary Artistic Gradients */}
@@ -311,12 +329,16 @@ export function FirebaseAuthPage() {
         <div className="relative z-10 flex items-center justify-center min-h-full">
           <div className="w-full max-w-4xl px-8 lg:px-16">
             {/* Auth Form - Centered */}
-            <div className="flex items-center justify-center min-h-full">
+            <div className={`flex items-center justify-center min-h-full transition-all duration-700 delay-300 ${
+              isAnimating ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            }`}>
               {renderAuthForm()}
             </div>
             
             {/* Trust Indicators */}
-            <div className="hidden lg:flex items-center justify-center gap-8 mt-8 text-sm text-gray-500 dark:text-gray-400">
+            <div className={`hidden lg:flex items-center justify-center gap-8 mt-8 text-sm text-gray-500 dark:text-gray-400 transition-all duration-700 delay-500 ${
+              isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span>Secure Login</span>
