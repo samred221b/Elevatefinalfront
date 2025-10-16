@@ -88,7 +88,7 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
           </div>
         </CardHeader>
       
-      <CardContent className="relative z-10 px-8 pt-6 pb-6">
+      <CardContent className="relative z-10 px-8 pt-2 pb-6">
         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
           {/* Error Message - Fixed height to prevent layout shift */}
           <div className="min-h-[52px]">
