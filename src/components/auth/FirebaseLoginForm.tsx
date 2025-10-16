@@ -60,7 +60,7 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
         {/* Subtle Pattern Overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-blue-500/5 opacity-50"></div>
         
-        <CardHeader className="relative text-center pb-6 lg:pb-4">
+        <CardHeader className="relative text-center pb-2">
           {/* Mobile Header */}
           <div className="lg:hidden">
             <CardTitle className="text-4xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">
@@ -79,7 +79,7 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
           
           {/* Desktop Header */}
           <div className="hidden lg:block">
-            <CardTitle className="text-2xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
+            <CardTitle className="text-2xl font-black bg-gradient-to-r from-violet-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-2">
               Welcome Back
             </CardTitle>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
@@ -88,7 +88,7 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
           </div>
         </CardHeader>
       
-      <CardContent className="relative z-10 px-8 py-6">
+      <CardContent className="relative z-10 px-8 pt-4 pb-6">
         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
           {/* Error Message - Fixed height to prevent layout shift */}
           <div className="min-h-[52px]">
