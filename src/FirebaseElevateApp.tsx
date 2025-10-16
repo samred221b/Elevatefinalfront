@@ -1,5 +1,6 @@
 import { AuthProvider, useAuth } from '@/context/FirebaseAuthContext'
 import { FirebaseAuthPage } from '@/components/auth/FirebaseAuthPage'
+import { WelcomeScreen } from '@/components/WelcomeScreen'
 import SuperEnhancedApp from './SuperEnhancedApp'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { useState, useEffect } from 'react'
@@ -13,28 +14,27 @@ function AppContent() {
   const [transitionType, setTransitionType] = useState<'login' | 'logout' | null>(null)
   const [showMainApp, setShowMainApp] = useState(false)
   const [hasInitialized, setHasInitialized] = useState(false)
+  const [showWelcomeScreen, setShowWelcomeScreen] = useState(false)
   
   // Initialize main app for existing users
   useEffect(() => {
     if (currentUser && !loading && !hasInitialized) {
       setHasInitialized(true)
       if (loginSuccess) {
-        // Fresh login - show transition
-        setTransitionType('login')
-        setIsTransitioning(true)
-        setTimeout(() => {
-          setShowMainApp(true)
-          setTimeout(() => {
-            setIsTransitioning(false)
-            setTransitionType(null)
-          }, 800)
-        }, 1200)
+        // Fresh login - show welcome screen first
+        setShowWelcomeScreen(true)
       } else {
         // Existing user - show app immediately
         setShowMainApp(true)
       }
     }
   }, [currentUser, loading, loginSuccess, hasInitialized])
+
+  // Handle welcome screen completion
+  const handleWelcomeComplete = () => {
+    setShowWelcomeScreen(false)
+    setShowMainApp(true)
+  }
 
   // Handle logout transition
   useEffect(() => {
@@ -43,6 +43,7 @@ function AppContent() {
       setIsTransitioning(true)
       setTimeout(() => {
         setShowMainApp(false)
+        setShowWelcomeScreen(false)
         setHasInitialized(false)
         setTimeout(() => {
           setIsTransitioning(false)
@@ -225,6 +226,11 @@ function AppContent() {
   // Show auth page if user is not logged in
   if (!currentUser) {
     return <FirebaseAuthPage />
+  }
+
+  // Show welcome screen for fresh logins
+  if (showWelcomeScreen && currentUser) {
+    return <WelcomeScreen onComplete={handleWelcomeComplete} />
   }
 
   // Show main app if user is logged in
