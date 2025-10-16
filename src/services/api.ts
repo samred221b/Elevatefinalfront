@@ -21,6 +21,8 @@ const api: AxiosInstance = axios.create({
 api.interceptors.request.use(
   async (config) => {
     try {
+      console.log('📡 Making API request to:', config.method?.toUpperCase(), config.url);
+      
       // Get the current user from Firebase
       const user = auth.currentUser;
       
@@ -30,9 +32,11 @@ api.interceptors.request.use(
         
         // Add the token to the Authorization header
         config.headers.Authorization = `Bearer ${token}`;
-        console.log('🔐 Added Firebase token to request:', config.url);
+        console.log('🔐 Added Firebase token to request');
+        console.log('👤 User:', user.email, 'UID:', user.uid);
       } else {
         console.warn('⚠️ No Firebase user found for request:', config.url);
+        console.warn('⚠️ User needs to be logged in to make API requests');
       }
     } catch (error) {
       console.error('❌ Error getting Firebase token:', error);
@@ -41,6 +45,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.error('❌ Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
@@ -48,11 +53,21 @@ api.interceptors.request.use(
 // Response interceptor to handle errors
 api.interceptors.response.use(
   (response: AxiosResponse) => {
+    console.log('✅ API Response:', response.status, response.config.url);
     return response;
   },
   (error) => {
-    // Simple error logging - no auth redirects with Firebase
-    console.error('API Error:', error);
+    // Detailed error logging
+    console.error('❌ API Error:', error.message);
+    if (error.response) {
+      console.error('❌ Response status:', error.response.status);
+      console.error('❌ Response data:', error.response.data);
+    } else if (error.request) {
+      console.error('❌ No response received from server');
+      console.error('❌ Request:', error.request);
+    } else {
+      console.error('❌ Error setting up request:', error.message);
+    }
     return Promise.reject(error);
   }
 );
