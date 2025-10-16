@@ -51,7 +51,7 @@ export function FirebaseLoginForm({ onSwitchToRegister, onSwitchToForgotPassword
   }
 
   return (
-    <div className="relative">
+    <div className="relative w-full max-w-2xl mx-auto">
       {/* Decorative Elements */}
       <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-violet-400/20 to-purple-500/20 rounded-full blur-sm"></div>
       <div className="absolute -top-2 -right-6 w-6 h-6 bg-gradient-to-br from-blue-400/20 to-cyan-500/20 rounded-full blur-sm"></div>
