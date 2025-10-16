@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
+  sendEmailVerification,
   updateProfile,
   onAuthStateChanged,
   AuthError
@@ -52,8 +53,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const result = await createUserWithEmailAndPassword(auth, email, password)
       // Update the user's display name
       await updateProfile(result.user, { displayName })
-      // Update local state
-      setCurrentUser({ ...result.user, displayName } as User)
+      
+      // Send email verification
+      await sendEmailVerification(result.user)
+      console.log('📧 Verification email sent to:', email)
+      
+      // Sign out the user until they verify their email
+      await signOut(auth)
+      console.log('🔐 User signed out - awaiting email verification')
     } catch (error) {
       const authError = error as AuthError
       throw new Error(getErrorMessage(authError.code))
@@ -68,12 +75,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLoginLoading(true)
       console.log('🔐 Attempting Firebase login for:', email)
       const result = await signInWithEmailAndPassword(auth, email, password)
+      
+      // Check if email is verified
+      if (!result.user.emailVerified) {
+        console.warn('⚠️ Email not verified for:', email)
+        await signOut(auth) // Sign out unverified user
+        throw new Error('Please verify your email before logging in. Check your inbox for the verification link.')
+      }
+      
       console.log('✅ Firebase login successful:', result.user.uid)
     } catch (error) {
       console.error('❌ Firebase login error:', error)
       const authError = error as AuthError
       console.error('❌ Error code:', authError.code)
       console.error('❌ Error message:', authError.message)
+      
+      // If it's our custom verification error, throw it as is
+      if (error instanceof Error && error.message.includes('verify your email')) {
+        throw error
+      }
+      
       throw new Error(getErrorMessage(authError.code))
     } finally {
       setLoginLoading(false)
