@@ -10,12 +10,11 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Target,
-  Zap
+  User
 } from 'lucide-react';
 import { Logo } from '../ui/Logo';
 
-type View = 'home' | 'templates' | 'analytics' | 'calendar' | 'profile' | 'settings' | 'progress' | 'badges' | 'data';
+type View = 'home' | 'templates' | 'analytics' | 'calendar' | 'profile' | 'help' | 'faq' | 'billing' | 'settings' | 'progress' | 'badges' | 'data';
 
 interface SidebarProps {
   currentView: View;
@@ -29,7 +28,7 @@ const navigationItems = [
     id: 'home' as View, 
     label: 'Home', 
     icon: Home, 
-    color: 'from-violet-500 to-purple-600',
+    color: 'from-emerald-400 to-cyan-500',
     description: 'Your habit dashboard'
   },
   { 
@@ -96,7 +95,7 @@ export function Sidebar({ currentView, onViewChange, isCollapsed, onToggleCollap
     `}>
       {/* Header */}
       <div className="p-4 border-b border-purple-200/30 dark:border-purple-800/30">
-        <div className="flex items-center justify-between">
+        <div className={`flex items-center ${isCollapsed ? 'justify-center flex-col gap-2' : 'justify-between'}`}>
           {!isCollapsed ? (
             <button 
               onClick={() => onViewChange('home')}
@@ -118,10 +117,17 @@ export function Sidebar({ currentView, onViewChange, isCollapsed, onToggleCollap
           )}
           <button
             onClick={onToggleCollapse}
-            className="p-2 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-colors"
+            className={`transition-all duration-200 ${
+              isCollapsed 
+                ? 'w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center group animate-pulse hover:animate-none' 
+                : 'p-2 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/50'
+            }`}
+            title={isCollapsed ? 'Expand Menu' : 'Collapse Menu'}
           >
             {isCollapsed ? (
-              <ChevronRight className="w-4 h-4 text-black dark:text-white" />
+              <div className="flex items-center justify-center">
+                <ChevronRight className="w-6 h-6 text-white group-hover:translate-x-0.5 transition-transform" />
+              </div>
             ) : (
               <ChevronLeft className="w-4 h-4 text-black dark:text-white" />
             )}
@@ -209,29 +215,71 @@ export function Sidebar({ currentView, onViewChange, isCollapsed, onToggleCollap
         })}
       </nav>
 
-      {/* Bottom Section */}
+      {/* Bottom Section - My Profile */}
       <div className="absolute bottom-4 left-0 right-0 px-2">
-        {!isCollapsed && (
-          <div className="bg-slate-800/10 rounded-xl p-3 border border-slate-200/30 dark:border-slate-700/30">
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="w-4 h-4 text-slate-800 dark:text-slate-200" />
-              <span className="text-sm font-medium text-slate-800 dark:text-slate-200">
-                Daily Goal
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-full h-2">
-                <div className="bg-gradient-to-r from-slate-800 to-teal-500 h-2 rounded-full w-3/4" />
-              </div>
-              <span className="text-xs text-slate-600 dark:text-slate-400">75%</span>
-            </div>
+        <button
+          onClick={() => onViewChange('profile')}
+          onMouseEnter={() => setHoveredItem('profile')}
+          onMouseLeave={() => setHoveredItem(null)}
+          className={`
+            w-full flex items-center gap-3 px-3 py-3 rounded-xl
+            transition-all duration-200 ease-in-out
+            group relative overflow-hidden
+            ${currentView === 'profile' 
+              ? 'bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg transform scale-105' 
+              : 'hover:bg-purple-50 dark:hover:bg-purple-900/30 text-gray-700 dark:text-gray-300'
+            }
+          `}
+        >
+          {/* Background animation */}
+          <div className={`
+            absolute inset-0 bg-gradient-to-r from-purple-500 to-violet-600 opacity-0
+            transition-opacity duration-200
+            ${hoveredItem === 'profile' && currentView !== 'profile' ? 'opacity-10' : ''}
+          `} />
+          
+          {/* Icon */}
+          <div className={`
+            relative z-10 flex items-center justify-center
+            ${isCollapsed ? 'w-full' : ''}
+          `}>
+            <User className={`
+              w-5 h-5 transition-all duration-200
+              ${currentView === 'profile' ? 'text-white' : 'text-black dark:text-white'}
+              ${hoveredItem === 'profile' && currentView !== 'profile' ? 'scale-110' : ''}
+            `} />
           </div>
-        )}
+          
+          {/* Label */}
+          {!isCollapsed && (
+            <div className="relative z-10 flex-1 text-left">
+              <div className={`
+                font-medium text-sm transition-colors duration-200
+                ${currentView === 'profile' ? 'text-white' : 'text-gray-700 dark:text-gray-300'}
+              `}>
+                My Profile
+              </div>
+              <div className={`
+                text-xs opacity-70 transition-colors duration-200
+                ${currentView === 'profile' ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}
+              `}>
+                Account & settings
+              </div>
+            </div>
+          )}
+          
+          {/* Active indicator */}
+          {currentView === 'profile' && (
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full" />
+          )}
+        </button>
         
-        {isCollapsed && (
-          <div className="flex justify-center">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-slate-800 to-teal-500 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
+        {/* Tooltip for collapsed state */}
+        {isCollapsed && hoveredItem === 'profile' && (
+          <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 z-30">
+            <div className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap shadow-xl">
+              My Profile
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-900 dark:bg-white rotate-45" />
             </div>
           </div>
         )}

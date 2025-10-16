@@ -3,15 +3,12 @@ import {
   Plus, 
   FolderPlus, 
   Target, 
-  Zap, 
-  X,
-  TrendingUp
+  X
 } from 'lucide-react';
 
 interface FloatingActionMenuProps {
   onAddCategory: () => void;
   onAddHabit: () => void;
-  onQuickLog: () => void;
 }
 
 const quickActions = [
@@ -28,24 +25,10 @@ const quickActions = [
     icon: Target,
     color: 'from-slate-800 to-teal-500',
     description: 'Add new habit'
-  },
-  {
-    id: 'log',
-    label: 'Quick Log',
-    icon: Zap,
-    color: 'from-emerald-500 to-teal-600',
-    description: 'Log habit completion'
-  },
-  {
-    id: 'streak',
-    label: 'View Streaks',
-    icon: TrendingUp,
-    color: 'from-orange-500 to-red-600',
-    description: 'Check your streaks'
   }
 ];
 
-export function FloatingActionMenu({ onAddCategory, onAddHabit, onQuickLog }: FloatingActionMenuProps) {
+export function FloatingActionMenu({ onAddCategory, onAddHabit }: FloatingActionMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredAction, setHoveredAction] = useState<string | null>(null);
 
@@ -56,12 +39,6 @@ export function FloatingActionMenu({ onAddCategory, onAddHabit, onQuickLog }: Fl
         break;
       case 'habit':
         onAddHabit();
-        break;
-      case 'log':
-        onQuickLog();
-        break;
-      case 'streak':
-        // Handle streak view
         break;
     }
     setIsOpen(false);
@@ -95,7 +72,7 @@ export function FloatingActionMenu({ onAddCategory, onAddHabit, onQuickLog }: Fl
                   
                   <div className="relative z-10">
                     <div className="text-sm font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                      <span className="text-lg">{action.icon === FolderPlus ? '📁' : action.icon === Target ? '🎯' : action.icon === Zap ? '⚡' : '📈'}</span>
+                      <span className="text-lg">{action.icon === FolderPlus ? '📁' : '🎯'}</span>
                       {action.label}
                     </div>
                     <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">

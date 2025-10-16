@@ -2,7 +2,8 @@ import { useMemo, useState, useEffect } from 'react';
 import { HabitProvider, useHabits } from './context/HabitContext';
 import { NavigationProvider, useNavigation } from './context/NavigationContext';
 import { ToastProvider } from './context/ToastContext';
-import { SearchFilter, FilterState } from './components/SearchFilter';
+import { SearchFilter } from './components/SearchFilter';
+import { FilterState } from './types/filters';
 import { CategorySection } from './components/CategorySection';
 import { AddCategoryDialog } from './components/AddCategoryDialog';
 import { AddHabitDialog } from './components/AddHabitDialog';
@@ -12,6 +13,9 @@ import { AdvancedAnalytics } from './components/AdvancedAnalytics';
 import { CalendarView } from './components/CalendarView';
 import { SettingsView } from './components/SettingsView';
 import { ProfileView } from './components/ProfileView';
+import { HelpView } from './components/HelpView';
+import { FAQView } from './components/FAQView';
+import { BillingView } from './components/BillingView';
 import { ProgressInsights } from './components/ProgressInsights';
 import { BadgesView } from './components/BadgesView';
 import { DataExport } from './components/DataExport';
@@ -25,7 +29,25 @@ import { FloatingActionMenu } from './components/navigation/FloatingActionMenu';
 import { Breadcrumb } from './components/navigation/Breadcrumb';
 
 function AppContent() {
-  const { categories, isDataLoading, refreshData, deleteCategory } = useHabits();
+  console.log('📱 AppContent rendering...')
+  const {
+    categories,
+    habits,
+    logs,
+    addCategory,
+    updateCategory,
+    deleteCategory,
+    reorderCategories,
+    addHabit,
+    updateHabit,
+    deleteHabit,
+    reorderHabits,
+    toggleHabit,
+    getHabitsByCategory,
+    refreshData,
+    isDataLoading
+  } = useHabits();
+
   const { 
     currentView, 
     setCurrentView, 
@@ -79,11 +101,23 @@ function AppContent() {
 
     if (filters.searchTerm.trim()) {
       const term = filters.searchTerm.toLowerCase();
-      list = list.filter(c => c.name.toLowerCase().includes(term));
+      list = list.filter(c => {
+        // Include category if name matches
+        if (c.name.toLowerCase().includes(term)) {
+          return true;
+        }
+        
+        // Include category if any of its habits match the search term
+        const categoryHabits = getHabitsByCategory(c.id);
+        return categoryHabits.some(habit => 
+          habit.name.toLowerCase().includes(term) ||
+          habit.description?.toLowerCase().includes(term)
+        );
+      });
     }
 
     return list.sort((a, b) => a.order - b.order);
-  }, [categories, filters]);
+  }, [categories, filters, getHabitsByCategory]);
 
   const handleAddCategory = () => {
     setEditCategory(null);
@@ -96,9 +130,6 @@ function AppContent() {
     setShowHabitDialog(true);
   };
 
-  const handleQuickLog = () => {
-    console.log('Quick log functionality');
-  };
 
   const renderContent = () => {
     const contentClass = `transition-all duration-300 ${isTransitioning ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`;
@@ -108,7 +139,7 @@ function AppContent() {
           <div className={`rounded-xl md:rounded-2xl border border-purple-300/50 dark:border-purple-800/50 p-4 md:p-6 bg-white/60 dark:bg-gray-900/40 backdrop-blur ${contentClass}`}>
             <div className="space-y-3 md:space-y-6">
               {/* Home Header */}
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-500 to-purple-600 p-4 md:p-8 text-white">
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-400 via-cyan-500 to-blue-500 p-4 md:p-8 text-white">
                 <div className="absolute inset-0 bg-black/20"></div>
                 <div className="relative z-10">
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-0 mb-4 lg:mb-6">
@@ -117,10 +148,10 @@ function AppContent() {
                         <Home className="w-6 h-6 md:w-8 md:h-8" />
                       </div>
                       <div>
-                        <h2 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-white to-purple-100 bg-clip-text text-transparent">
+                        <h2 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-white to-cyan-100 bg-clip-text text-transparent">
                           Your Habits
                         </h2>
-                        <p className="text-purple-100 mt-1 text-sm md:text-lg">Monitor your daily progress and transform your life one habit at a time 🚀</p>
+                        <p className="text-cyan-100 mt-1 text-sm md:text-lg">Monitor your daily progress and transform your life one habit at a time 🚀</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-2 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -133,7 +164,7 @@ function AppContent() {
                   
                   {/* Status Message */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-4">
-                    <span className="text-purple-100 font-medium text-sm md:text-base">Status:</span>
+                    <span className="text-cyan-100 font-medium text-sm md:text-base">Status:</span>
                     <div className="flex bg-white/10 rounded-xl p-1 backdrop-blur-sm">
                       <div className="flex items-center gap-2 px-2 md:px-3 py-1 bg-white/10 rounded-lg">
                         <span className="text-xs md:text-sm font-medium text-white">Ready to conquer your habits? Let's dominate today! 💪</span>
@@ -187,6 +218,7 @@ function AppContent() {
                       >
                         <CategorySection
                           category={category}
+                          filters={filters}
                           onEditCategory={(cat) => { setEditCategory(cat); setShowCategoryDialog(true); }}
                           onDeleteCategory={async (cat) => {
                             try {
@@ -268,6 +300,27 @@ function AppContent() {
         return (
           <div className={`rounded-xl md:rounded-2xl border border-purple-300/50 dark:border-purple-800/50 p-4 md:p-6 bg-white/60 dark:bg-gray-900/40 backdrop-blur ${contentClass}`}>
             <ProfileView />
+          </div>
+        );
+
+      case 'help':
+        return (
+          <div className={`rounded-xl md:rounded-2xl border border-blue-300/50 dark:border-blue-800/50 p-4 md:p-6 bg-white/60 dark:bg-gray-900/40 backdrop-blur ${contentClass}`}>
+            <HelpView />
+          </div>
+        );
+
+      case 'faq':
+        return (
+          <div className={`rounded-xl md:rounded-2xl border border-blue-300/50 dark:border-blue-800/50 p-4 md:p-6 bg-white/60 dark:bg-gray-900/40 backdrop-blur ${contentClass}`}>
+            <FAQView />
+          </div>
+        );
+
+      case 'billing':
+        return (
+          <div className={`rounded-xl md:rounded-2xl border border-green-300/50 dark:border-green-800/50 p-4 md:p-6 bg-white/60 dark:bg-gray-900/40 backdrop-blur ${contentClass}`}>
+            <BillingView />
           </div>
         );
 
@@ -369,6 +422,7 @@ function AppContent() {
           </div>
         );
 
+
       default:
         return null;
     }
@@ -423,7 +477,6 @@ function AppContent() {
       <FloatingActionMenu
         onAddCategory={handleAddCategory}
         onAddHabit={handleAddHabit}
-        onQuickLog={handleQuickLog}
       />
 
       {/* Dialogs */}
@@ -452,6 +505,7 @@ function AppContent() {
 }
 
 function SuperEnhancedApp() {
+  console.log('🚀 SuperEnhancedApp rendering...')
   return (
     <ToastProvider>
       <HabitProvider>

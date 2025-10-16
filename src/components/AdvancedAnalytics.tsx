@@ -173,21 +173,21 @@ export function AdvancedAnalytics() {
   const insight = getPerformanceInsight()
 
   return (
-    <div className="space-y-8">
-      {/* Creative Header - Mobile Responsive */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-600 p-4 md:p-8 text-white">
+    <div className="space-y-3 md:space-y-6 h-full overflow-hidden">
+      {/* Compact Header - Mobile Optimized */}
+      <div className="relative overflow-hidden rounded-2xl md:rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-600 p-3 md:p-8 text-white">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-0 mb-4 lg:mb-6">
-            <div className="flex items-center gap-3 md:gap-4">
-              <div className="p-2 md:p-3 bg-white/20 rounded-xl md:rounded-2xl backdrop-blur-sm">
-                <Brain className="w-6 h-6 md:w-8 md:h-8" />
+            <div className="flex items-center gap-2 md:gap-4">
+              <div className="p-1.5 md:p-3 bg-white/20 rounded-lg md:rounded-2xl backdrop-blur-sm">
+                <Brain className="w-4 h-4 md:w-8 md:h-8" />
               </div>
               <div>
-                <h2 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-white to-emerald-100 bg-clip-text text-transparent">
-                  Advanced Analytics
+                <h2 className="text-lg md:text-4xl font-bold bg-gradient-to-r from-white to-emerald-100 bg-clip-text text-transparent">
+                  Analytics
                 </h2>
-                <p className="text-emerald-100 mt-1 text-sm md:text-lg">Deep insights into your habit performance 🧠</p>
+                <p className="text-emerald-100 mt-0.5 text-xs md:text-lg hidden sm:block">Deep insights into your habit performance 🧠</p>
               </div>
             </div>
             
@@ -294,86 +294,86 @@ export function AdvancedAnalytics() {
         <div className="absolute bottom-4 left-4 w-24 h-24 bg-white/5 rounded-full animate-bounce"></div>
       </div>
 
-      {/* Enhanced Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Compact Stats Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-6">
         {/* Consistency Score */}
         <Card className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800 hover:shadow-xl transition-all duration-300">
-          <CardContent className="pt-6 relative z-10">
+          <CardContent className="pt-3 md:pt-6 p-3 md:p-6 relative z-10">
             <div className="text-center">
-              <div className="flex items-center justify-center mb-3">
-                <div className="p-3 bg-blue-500/20 rounded-full">
-                  <Calendar className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center justify-center mb-2 md:mb-3">
+                <div className="p-2 md:p-3 bg-blue-500/20 rounded-full">
+                  <Calendar className="w-4 h-4 md:w-6 md:h-6 text-blue-600 dark:text-blue-400" />
                 </div>
               </div>
-              <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">Consistency</p>
-              <p className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mt-2">
+              <p className="text-xs md:text-sm text-blue-600 dark:text-blue-400 font-medium">Consistency</p>
+              <p className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mt-1 md:mt-2">
                 {consistencyScore}%
               </p>
-              <p className="text-xs text-blue-500 mt-1">Active days (30d)</p>
+              <p className="text-xs text-blue-500 mt-0.5 md:mt-1 hidden md:block">Active days (30d)</p>
             </div>
           </CardContent>
-          <div className="absolute top-2 right-2 w-20 h-20 bg-blue-500/10 rounded-full animate-pulse"></div>
+          <div className="absolute top-1 right-1 md:top-2 md:right-2 w-12 h-12 md:w-20 md:h-20 bg-blue-500/10 rounded-full animate-pulse"></div>
         </Card>
 
         {/* Average Completion */}
         <Card className="relative overflow-hidden bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800 hover:shadow-xl transition-all duration-300">
-          <CardContent className="pt-6 relative z-10">
+          <CardContent className="pt-3 md:pt-6 p-3 md:p-6 relative z-10">
             <div className="text-center">
-              <div className="flex items-center justify-center mb-3">
-                <div className="p-3 bg-green-500/20 rounded-full">
-                  <Target className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <div className="flex items-center justify-center mb-2 md:mb-3">
+                <div className="p-2 md:p-3 bg-green-500/20 rounded-full">
+                  <Target className="w-4 h-4 md:w-6 md:h-6 text-green-600 dark:text-green-400" />
                 </div>
               </div>
-              <p className="text-sm text-green-600 dark:text-green-400 font-medium">Avg. Completion</p>
-              <p className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mt-2">
+              <p className="text-xs md:text-sm text-green-600 dark:text-green-400 font-medium">Completion</p>
+              <p className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mt-1 md:mt-2">
                 {avgCompletionRate}%
               </p>
-              <p className="text-xs text-green-500 mt-1">Last 30 days</p>
+              <p className="text-xs text-green-500 mt-0.5 md:mt-1 hidden md:block">Last 30 days</p>
             </div>
           </CardContent>
-          <div className="absolute top-2 right-2 w-20 h-20 bg-green-500/10 rounded-full animate-bounce"></div>
+          <div className="absolute top-1 right-1 md:top-2 md:right-2 w-12 h-12 md:w-20 md:h-20 bg-green-500/10 rounded-full animate-bounce"></div>
         </Card>
 
         {/* Trend Direction */}
         <Card className="relative overflow-hidden bg-gradient-to-br from-orange-50 to-red-100 dark:from-orange-900/20 dark:to-red-900/20 border-orange-200 dark:border-orange-800 hover:shadow-xl transition-all duration-300">
-          <CardContent className="pt-6 relative z-10">
+          <CardContent className="pt-3 md:pt-6 p-3 md:p-6 relative z-10">
             <div className="text-center">
-              <div className="flex items-center justify-center mb-3">
-                <div className="p-3 bg-orange-500/20 rounded-full">
-                  {trendDirection === 'up' && <TrendingUp className="w-6 h-6 text-green-600" />}
-                  {trendDirection === 'down' && <TrendingDown className="w-6 h-6 text-red-600" />}
-                  {trendDirection === 'neutral' && <Activity className="w-6 h-6 text-orange-600" />}
+              <div className="flex items-center justify-center mb-2 md:mb-3">
+                <div className="p-2 md:p-3 bg-orange-500/20 rounded-full">
+                  {trendDirection === 'up' && <TrendingUp className="w-4 h-4 md:w-6 md:h-6 text-green-600" />}
+                  {trendDirection === 'down' && <TrendingDown className="w-4 h-4 md:w-6 md:h-6 text-red-600" />}
+                  {trendDirection === 'neutral' && <Activity className="w-4 h-4 md:w-6 md:h-6 text-orange-600" />}
                 </div>
               </div>
-              <p className="text-sm text-orange-600 dark:text-orange-400 font-medium">Trend</p>
-              <p className="text-2xl font-bold mt-2" style={{ 
+              <p className="text-xs md:text-sm text-orange-600 dark:text-orange-400 font-medium">Trend</p>
+              <p className="text-lg md:text-2xl font-bold mt-1 md:mt-2" style={{ 
                 color: trendDirection === 'up' ? '#16a34a' : trendDirection === 'down' ? '#dc2626' : '#ea580c' 
               }}>
                 {trendDirection === 'up' ? 'Rising' : trendDirection === 'down' ? 'Falling' : 'Stable'}
               </p>
-              <p className="text-xs text-orange-500 mt-1">vs. last week</p>
+              <p className="text-xs text-orange-500 mt-0.5 md:mt-1 hidden md:block">vs. last week</p>
             </div>
           </CardContent>
-          <div className="absolute top-2 right-2 w-20 h-20 bg-orange-500/10 rounded-full animate-pulse"></div>
+          <div className="absolute top-1 right-1 md:top-2 md:right-2 w-12 h-12 md:w-20 md:h-20 bg-orange-500/10 rounded-full animate-pulse"></div>
         </Card>
 
         {/* Total Habits */}
         <Card className="relative overflow-hidden bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-800 hover:shadow-xl transition-all duration-300">
-          <CardContent className="pt-6 relative z-10">
+          <CardContent className="pt-3 md:pt-6 p-3 md:p-6 relative z-10">
             <div className="text-center">
-              <div className="flex items-center justify-center mb-3">
-                <div className="p-3 bg-purple-500/20 rounded-full">
-                  <Award className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <div className="flex items-center justify-center mb-2 md:mb-3">
+                <div className="p-2 md:p-3 bg-purple-500/20 rounded-full">
+                  <Award className="w-4 h-4 md:w-6 md:h-6 text-purple-600 dark:text-purple-400" />
                 </div>
               </div>
-              <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">Total Habits</p>
-              <p className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mt-2">
+              <p className="text-xs md:text-sm text-purple-600 dark:text-purple-400 font-medium">Habits</p>
+              <p className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mt-1 md:mt-2">
                 {habits.length}
               </p>
-              <p className="text-xs text-purple-500 mt-1">Active tracking</p>
+              <p className="text-xs text-purple-500 mt-0.5 md:mt-1 hidden md:block">Active tracking</p>
             </div>
           </CardContent>
-          <div className="absolute top-2 right-2 w-20 h-20 bg-purple-500/10 rounded-full animate-pulse"></div>
+          <div className="absolute top-1 right-1 md:top-2 md:right-2 w-12 h-12 md:w-20 md:h-20 bg-purple-500/10 rounded-full animate-pulse"></div>
         </Card>
       </div>
 

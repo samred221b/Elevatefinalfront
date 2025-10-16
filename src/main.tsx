@@ -1,10 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { AuthProvider } from './context/AuthContext'
-import { ToastProvider } from './context/ToastContext'
-import { ElevateApp } from './ElevateApp'
 import SuperEnhancedApp from './SuperEnhancedApp'
 import EnhancedApp from './EnhancedApp'
+import FirebaseElevateApp from './FirebaseElevateApp'
 import './index.css'
 
 // Simple test component
@@ -23,16 +21,12 @@ const isTest = window.location.search.includes('debug=true')
 const useEnhanced = window.location.search.includes('enhanced=true')
 const useNoAuth = window.location.search.includes('noauth=true')
 
-// Use ElevateApp with authentication by default
+// Use Firebase authentication by default
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     {isTest ? <SimpleTest /> : 
      useEnhanced ? <EnhancedApp /> : 
      useNoAuth ? <SuperEnhancedApp /> :
-     <ToastProvider>
-       <AuthProvider>
-         <ElevateApp />
-       </AuthProvider>
-     </ToastProvider>}
+     <FirebaseElevateApp />}
   </React.StrictMode>,
 )

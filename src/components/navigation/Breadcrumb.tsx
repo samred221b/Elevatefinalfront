@@ -2,7 +2,7 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react'
 import { Logo } from '../ui/Logo'
 
-type View = 'home' | 'templates' | 'analytics' | 'calendar' | 'profile' | 'settings' | 'progress' | 'badges' | 'data';
+type View = 'home' | 'templates' | 'analytics' | 'calendar' | 'profile' | 'help' | 'faq' | 'billing' | 'settings' | 'progress' | 'badges' | 'data';
 
 interface BreadcrumbProps {
   currentView: View;
@@ -16,6 +16,9 @@ const viewLabels: Record<View, string> = {
   analytics: 'Analytics & Insights',
   calendar: 'Calendar View',
   profile: 'My Profile',
+  help: 'Help & Support',
+  faq: 'Frequently Asked Questions',
+  billing: 'Billing & Subscriptions',
   settings: 'Settings',
   progress: 'Progress Tracking',
   badges: 'Achievements',

@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { 
   Search, 
+  Filter, 
   Bell, 
-  User, 
   Sun, 
-  Moon, 
-  Filter,
-  Sparkles,
-  Zap
+  Moon,
+  User
 } from 'lucide-react';
 
 interface TopNavProps {
@@ -60,22 +58,8 @@ export function TopNav({ searchTerm, onSearchChange, showSearch = true }: TopNav
           </div>
         )}
 
-        {/* Center Section - Quick Stats */}
-        <div className="flex items-center gap-6 mx-8">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-violet-500/10 to-purple-500/10">
-            <Zap className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              5 day streak
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-500/10">
-            <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              75% today
-            </span>
-          </div>
-        </div>
+        {/* Center Section - Spacer */}
+        <div className="flex-1"></div>
 
         {/* Right Section - Actions */}
         <div className="flex items-center gap-3">

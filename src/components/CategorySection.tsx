@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { createPortal } from 'react-dom'
 import { Category, Habit } from '@/types'
 import { useHabits } from '@/context/HabitContext'
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card'
@@ -6,9 +7,11 @@ import { Button } from './ui/button'
 import { HabitCard } from './HabitCard'
 import { Plus, Edit2, ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import { ConfirmationModal } from './ui/ConfirmationModal'
+import { FilterState } from '../types/filters'
 
 interface CategorySectionProps {
   category: Category
+  filters: FilterState
   onEditCategory: (category: Category) => void
   onDeleteCategory: (category: Category) => void
   onAddHabit: (categoryId: string) => void
@@ -17,6 +20,7 @@ interface CategorySectionProps {
 
 export function CategorySection({ 
   category, 
+  filters,
   onEditCategory,
   onDeleteCategory,
   onAddHabit, 
@@ -26,7 +30,38 @@ export function CategorySection({
   const [isCollapsed, setIsCollapsed] = useState(true)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   
-  const habits = getHabitsByCategory(category.id)
+  const allHabits = getHabitsByCategory(category.id)
+  
+  // Filter habits based on the current filters
+  const habits = useMemo(() => {
+    let filteredHabits = allHabits
+
+    // Filter by search term (habit name)
+    if (filters.searchTerm.trim()) {
+      const term = filters.searchTerm.toLowerCase()
+      filteredHabits = filteredHabits.filter(habit => 
+        habit.name.toLowerCase().includes(term) ||
+        habit.description?.toLowerCase().includes(term)
+      )
+    }
+
+    // Filter by difficulty
+    if (filters.difficulty !== 'all') {
+      filteredHabits = filteredHabits.filter(habit => habit.difficulty === filters.difficulty)
+    }
+
+    // Filter by frequency
+    if (filters.frequency !== 'all') {
+      filteredHabits = filteredHabits.filter(habit => habit.frequency === filters.frequency)
+    }
+
+    // Filter archived habits
+    if (!filters.showArchived) {
+      filteredHabits = filteredHabits.filter(habit => !habit.archived)
+    }
+
+    return filteredHabits
+  }, [allHabits, filters])
   const completedToday = habits.filter(habit => {
     const today = new Date().toISOString().split('T')[0]
     const todayLog = logs.find(log => log.habitId === habit.id && log.date === today)
@@ -108,6 +143,7 @@ export function CategorySection({
                   size="sm"
                   onClick={(e) => {
                     e.stopPropagation()
+                    console.log('🗑️ Category delete button clicked:', category.name)
                     setShowDeleteConfirm(true)
                   }}
                   className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
@@ -159,21 +195,29 @@ export function CategorySection({
         )}
       </Card>
 
-      <ConfirmationModal
-        isOpen={showDeleteConfirm}
-        onClose={() => setShowDeleteConfirm(false)}
-        onConfirm={() => onDeleteCategory(category)}
-        title="Delete Category"
-        message={
-          habits.length > 0
-            ? `Are you sure you want to delete "${category.name}"? This will also delete all ${habits.length} habits in this category. This action cannot be undone.`
-            : `Are you sure you want to delete "${category.name}"? This action cannot be undone.`
-        }
-        confirmText="Delete"
-        cancelText="Cancel"
-        type="danger"
-        icon={<Trash2 className="w-6 h-6" />}
-      />
+      {/* Modal rendered as portal to document body */}
+      {showDeleteConfirm && createPortal(
+        <ConfirmationModal
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={() => {
+            console.log('🗑️ Confirming delete for category:', category.name, category.id)
+            setShowDeleteConfirm(false);
+            onDeleteCategory(category);
+          }}
+          title="Delete Category"
+          message={
+            allHabits.length > 0
+              ? `Are you sure you want to delete "${category.name}"? This will also delete all ${allHabits.length} habits in this category. This action cannot be undone.`
+              : `Are you sure you want to delete "${category.name}"? This action cannot be undone.`
+          }
+          confirmText="Delete"
+          cancelText="Cancel"
+          type="danger"
+          icon={<Trash2 className="w-6 h-6" />}
+        />,
+        document.body
+      )}
     </>
   )
 }

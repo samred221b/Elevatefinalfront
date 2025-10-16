@@ -7,9 +7,10 @@ import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 
 interface RegisterFormProps {
   onSwitchToLogin: () => void;
+  onRegistrationSuccess?: (data: any) => void;
 }
 
-export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
+export function RegisterForm({ onSwitchToLogin, onRegistrationSuccess }: RegisterFormProps) {
   const { registerUser, isAuthLoading, error, clearError } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -68,10 +69,11 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
       return;
     }
 
-    const success = await registerUser(name.trim(), email, password);
-    if (success) {
-      // Success will be handled by the auth context and parent component
-      console.log('✅ Registration successful!');
+    const result = await registerUser(name.trim(), email, password);
+    if (result && result.requiresVerification) {
+      // Call the parent handler to show email verification
+      onRegistrationSuccess?.(result);
+      console.log('✅ Registration successful, verification required!');
     }
   };
 
@@ -288,9 +290,29 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
           disabled={isAuthLoading}
         >
           {isAuthLoading ? (
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              <span>Creating account...</span>
+            <div className="flex items-center justify-center gap-4">
+              {/* Advanced Habit Journey Starting Animation */}
+              <div className="relative">
+                {/* Outer journey ring */}
+                <div className="w-7 h-7 border-2 border-white/25 rounded-full"></div>
+                {/* Animated progress ring */}
+                <div className="absolute inset-0 w-7 h-7 border-2 border-transparent border-t-white rounded-full animate-spin"></div>
+                {/* Inner goal dot */}
+                <div className="absolute inset-2 flex items-center justify-center">
+                  <div className="w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                </div>
+                {/* Journey milestone indicators */}
+                <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
+                <div className="absolute -bottom-0.5 -left-0.5 w-1 h-1 bg-cyan-400 rounded-full animate-pulse delay-200"></div>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="font-semibold">Starting your journey...</span>
+                <div className="flex gap-0.5 mt-1">
+                  <div className="w-1 h-1 bg-white/70 rounded-full animate-bounce"></div>
+                  <div className="w-1 h-1 bg-white/70 rounded-full animate-bounce delay-75"></div>
+                  <div className="w-1 h-1 bg-white/70 rounded-full animate-bounce delay-150"></div>
+                </div>
+              </div>
             </div>
           ) : (
             'Sign Up'

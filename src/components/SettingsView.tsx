@@ -5,8 +5,7 @@ import { Select } from './ui/select'
 import { Switch } from './ui/switch'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
-import { ApiHealthCheck } from './ApiHealthCheck'
-import { Moon, Sun, Monitor, Bell, Globe, Zap, Shield, Info, Download, RefreshCw, User, Calendar, Clock, Mail } from 'lucide-react'
+import { Moon, Sun, Monitor, Bell, Globe, Zap, Shield, Info, Download, RefreshCw } from 'lucide-react'
 
 export function SettingsView() {
   const { settings, updateSettings, categories, habits, logs } = useHabits()
@@ -52,67 +51,6 @@ export function SettingsView() {
 
   return (
     <div className="space-y-6 w-full">
-      {/* Account Information */}
-      <Card className="border-blue-500/50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-            <User className="w-5 h-5" />
-            Account Information
-          </CardTitle>
-          <CardDescription>Your account details and statistics</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
-              <div className="flex items-center gap-3">
-                <Mail className="w-8 h-8 text-blue-600" />
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Email Address</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {localStorage.getItem('userEmail') || 'No email available'}
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-4 rounded-lg border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20">
-              <div className="flex items-center gap-3">
-                <Calendar className="w-8 h-8 text-green-600" />
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Member Since</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {new Date().toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-4 rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20">
-              <div className="flex items-center gap-3">
-                <Zap className="w-8 h-8 text-purple-600" />
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Total Habits</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {habits.length} habits created
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-4 rounded-lg border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20">
-              <div className="flex items-center gap-3">
-                <Clock className="w-8 h-8 text-orange-600" />
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Total Logs</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {logs.length} habit completions
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       <Card>
         <CardHeader>
@@ -465,19 +403,6 @@ export function SettingsView() {
         </CardContent>
       </Card>
 
-      {/* API Health Check */}
-      <Card className="border-blue-500/50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-            <Globe className="w-5 h-5" />
-            API Connection
-          </CardTitle>
-          <CardDescription>Check the connection to your backend API</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ApiHealthCheck />
-        </CardContent>
-      </Card>
 
     </div>
   )

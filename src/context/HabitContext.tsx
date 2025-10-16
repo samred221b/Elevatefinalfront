@@ -13,6 +13,7 @@ import {
 import { Category, Habit, HabitLog, UserBadge, AppSettings, StreakData } from '@/types';
 import { AVAILABLE_BADGES } from '@/lib/badges';
 import { getToday } from '@/lib/utils';
+import { useAuth } from './FirebaseAuthContext';
 
 interface HabitContextType {
   categories: Category[]
@@ -82,6 +83,7 @@ const convertBackendLog = (backendLog: BackendLog): HabitLog => ({
 });
 
 export function HabitProvider({ children }: { children: ReactNode }) {
+  const { currentUser, loading: authLoading } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [habits, setHabits] = useState<Habit[]>([]);
   const [logs, setLogs] = useState<HabitLog[]>([]);
@@ -100,6 +102,7 @@ export function HabitProvider({ children }: { children: ReactNode }) {
   });
   const [streaks, setStreaks] = useState<Map<string, StreakData>>(new Map());
   const [isDataLoading, setIsDataLoading] = useState(false);
+  const [isSwitchingUser, setIsSwitchingUser] = useState(false);
 
   // Apply theme on mount and when settings change
   useEffect(() => {
@@ -118,25 +121,69 @@ export function HabitProvider({ children }: { children: ReactNode }) {
     applyTheme(settings.theme);
   }, [settings.theme]);
 
-  // Load data on mount - but only if not already loading
-  useEffect(() => {
-    // Small delay to prevent immediate loading after auth
-    const timer = setTimeout(() => {
-      refreshData();
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, []);
+  // Track the current user ID to detect user changes
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-  // Calculate streaks whenever logs change
+  useEffect(() => {
+    if (!authLoading && currentUser) {
+      const newUserId = currentUser.uid;
+      
+      // Check if this is a different user
+      if (currentUserId && currentUserId !== newUserId) {
+        console.log('🔄 HabitContext: Different user detected, clearing previous data');
+        
+        // Force clear all data immediately
+        forceClearAllData();
+        setIsSwitchingUser(true);
+      }
+      
+      // Update current user ID
+      setCurrentUserId(newUserId);
+      
+      // Load data for the current user
+      console.log('🔄 HabitContext: Loading data for user:', newUserId);
+      
+      // Add a small delay to ensure Firebase token is ready
+      const timer = setTimeout(() => {
+        refreshData();
+      }, 200);
+      
+      return () => clearTimeout(timer);
+    } else if (!authLoading && !currentUser) {
+      // Clear data when user logs out
+      console.log('🔄 HabitContext: User logged out, clearing all data');
+      forceClearAllData();
+      setCurrentUserId(null);
+    }
+  }, [currentUser, authLoading]);
+
   useEffect(() => {
     calculateStreaks();
   }, [habits, logs]);
 
-  const refreshData = async () => {
+  const forceClearAllData = () => {
+    console.log('🧹 HabitContext: Force clearing all data');
+    setCategories([]);
+    setHabits([]);
+    setLogs([]);
+    setBadges([]);
+    setStreaks(new Map());
+    setIsDataLoading(false);
+    setIsSwitchingUser(false);
+    console.log('✅ HabitContext: All data force cleared');
+  };
 
+  const refreshData = async () => {
+    if (!currentUser) {
+      console.warn('⚠️ HabitContext: Cannot refresh data - no authenticated user');
+      return;
+    }
+    
+    console.log('🔄 HabitContext: Starting data refresh for user:', currentUser.uid);
+    
     try {
       setIsDataLoading(true);
+      console.log('🔄 HabitContext: Loading data from backend...');
       
       // Load categories, habits, and recent logs in parallel
       const [categoriesRes, habitsRes, logsRes] = await Promise.all([
@@ -145,24 +192,35 @@ export function HabitProvider({ children }: { children: ReactNode }) {
         logService.getLogs({ limit: 1000 }) // Get recent logs
       ]);
 
+      console.log('🔄 HabitContext: Backend responses received:', {
+        categories: categoriesRes.success,
+        habits: habitsRes.success,
+        logs: logsRes.success
+      });
+
       if (categoriesRes.success && categoriesRes.data) {
+        console.log('✅ HabitContext: Setting categories:', categoriesRes.data.length, 'for user:', currentUser.uid);
         setCategories(categoriesRes.data.map(convertBackendCategory));
       }
 
       if (habitsRes.success && habitsRes.data) {
+        console.log('✅ HabitContext: Setting habits:', habitsRes.data.length, 'for user:', currentUser.uid);
         setHabits(habitsRes.data.map(convertBackendHabit));
       }
 
       if (logsRes.success && logsRes.data) {
+        console.log('✅ HabitContext: Setting logs:', logsRes.data.length, 'for user:', currentUser.uid);
         setLogs(logsRes.data.map(convertBackendLog));
       }
 
-      // User settings will be handled by the new auth system
+      console.log('✅ HabitContext: Data refresh completed successfully');
 
     } catch (error) {
-      console.error('Error refreshing data:', error);
+      console.error('❌ HabitContext: Error refreshing data:', error);
     } finally {
       setIsDataLoading(false);
+      setIsSwitchingUser(false);
+      console.log('🔄 HabitContext: Data loading finished');
     }
   };
 
@@ -483,12 +541,18 @@ export function HabitProvider({ children }: { children: ReactNode }) {
     habits.forEach(habit => {
       const streak = getStreakForHabit(habit.id);
       
+      // Debug logging for streak badges
+      if (streak.currentStreak > 0) {
+        console.log(`🔥 Habit "${habit.name}" current streak: ${streak.currentStreak} days`);
+      }
+      
       AVAILABLE_BADGES.filter(b => b.type === 'streak').forEach(badge => {
         const alreadyEarned = badges.some(
           ub => ub.badgeId === badge.id && ub.habitId === habit.id
         );
         
         if (!alreadyEarned && streak.currentStreak >= badge.requirement) {
+          console.log(`🏆 BADGE EARNED! "${badge.name}" for habit "${habit.name}" (${streak.currentStreak}-day streak)`);
           newBadges.push({
             badgeId: badge.id,
             earnedAt: new Date().toISOString(),
@@ -535,6 +599,7 @@ export function HabitProvider({ children }: { children: ReactNode }) {
     });
 
     if (newBadges.length > badges.length) {
+      console.log(`🎉 Updating badges! New count: ${newBadges.length} (was ${badges.length})`);
       setBadges(newBadges);
     }
   };
@@ -546,7 +611,7 @@ export function HabitProvider({ children }: { children: ReactNode }) {
     badges,
     settings,
     streaks,
-    isDataLoading,
+    isDataLoading: isDataLoading || isSwitchingUser,
     addCategory,
     updateCategory,
     deleteCategory,

@@ -4,18 +4,13 @@ import { Select } from './ui/select'
 import { Button } from './ui/button'
 import { Search, X, Filter } from 'lucide-react'
 import { useHabits } from '@/context/HabitContext'
+import { FilterState } from '../types/filters'
 
 interface SearchFilterProps {
   onFilterChange: (filters: FilterState) => void
 }
 
-export interface FilterState {
-  searchTerm: string
-  categoryId: string
-  difficulty: string
-  frequency: string
-  showArchived: boolean
-}
+export type { FilterState }
 
 export function SearchFilter({ onFilterChange }: SearchFilterProps) {
   const { categories } = useHabits()

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Home, FileText, BarChart3, Calendar, TrendingUp, Award, Database, Settings, Bell, User } from 'lucide-react';
 import { Logo } from '../ui/Logo';
 
-type View = 'home' | 'templates' | 'analytics' | 'calendar' | 'profile' | 'settings' | 'progress' | 'badges' | 'data';
+type View = 'home' | 'templates' | 'analytics' | 'calendar' | 'profile' | 'help' | 'faq' | 'billing' | 'settings' | 'progress' | 'badges' | 'data';
 
 interface MobileNavProps {
   currentView: View;
@@ -12,14 +12,62 @@ interface MobileNavProps {
 }
 
 const navigationItems = [
-  { id: 'home' as View, label: 'Home', icon: Home, color: 'from-violet-500 to-purple-600' },
-  { id: 'templates' as View, label: 'Templates', icon: FileText, color: 'from-blue-500 to-cyan-600' },
-  { id: 'analytics' as View, label: 'Analytics', icon: BarChart3, color: 'from-emerald-500 to-teal-600' },
-  { id: 'calendar' as View, label: 'Calendar', icon: Calendar, color: 'from-orange-500 to-red-600' },
-  { id: 'progress' as View, label: 'Progress', icon: TrendingUp, color: 'from-pink-500 to-rose-600' },
-  { id: 'badges' as View, label: 'Badges', icon: Award, color: 'from-yellow-500 to-amber-600' },
-  { id: 'data' as View, label: 'Data', icon: Database, color: 'from-indigo-500 to-blue-600' },
-  { id: 'settings' as View, label: 'Settings', icon: Settings, color: 'from-gray-500 to-slate-600' },
+  { 
+    id: 'home' as View, 
+    label: 'Home', 
+    icon: Home, 
+    color: 'from-emerald-400 to-cyan-500',
+    description: 'Your habit dashboard'
+  },
+  { 
+    id: 'templates' as View, 
+    label: 'Templates', 
+    icon: FileText, 
+    color: 'from-blue-500 to-cyan-600',
+    description: 'Pre-built habit templates'
+  },
+  { 
+    id: 'analytics' as View, 
+    label: 'Analytics', 
+    icon: BarChart3, 
+    color: 'from-emerald-500 to-teal-600',
+    description: 'Detailed insights & stats'
+  },
+  { 
+    id: 'calendar' as View, 
+    label: 'Calendar', 
+    icon: Calendar, 
+    color: 'from-orange-500 to-red-600',
+    description: 'Calendar view of habits'
+  },
+  { 
+    id: 'progress' as View, 
+    label: 'Progress', 
+    icon: TrendingUp, 
+    color: 'from-pink-500 to-rose-600',
+    description: 'Track your progress'
+  },
+  { 
+    id: 'badges' as View, 
+    label: 'Badges', 
+    icon: Award, 
+    color: 'from-yellow-500 to-amber-600',
+    description: 'Achievements & rewards'
+  },
+  { 
+    id: 'data' as View, 
+    label: 'Data', 
+    icon: Database, 
+    color: 'from-indigo-500 to-blue-600',
+    description: 'Export & manage data'
+  },
+  { 
+    id: 'settings' as View, 
+    label: 'Settings', 
+    icon: Settings, 
+    color: 'from-gray-500 to-slate-600',
+    description: 'App preferences'
+  },
 ];
 
 export function MobileNav({ currentView, onViewChange, isOpen, onToggle }: MobileNavProps) {
@@ -114,22 +162,6 @@ export function MobileNav({ currentView, onViewChange, isOpen, onToggle }: Mobil
           </button>
         </div>
 
-        {/* User Profile Section */}
-        <div className="p-4 border-b border-purple-200/30 dark:border-purple-800/30">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
-              <User className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <div className="font-semibold text-gray-900 dark:text-gray-100">
-                Welcome back!
-              </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                Keep building great habits
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Navigation Items */}
         <nav className="p-2 space-y-1">
@@ -172,22 +204,44 @@ export function MobileNav({ currentView, onViewChange, isOpen, onToggle }: Mobil
           })}
         </nav>
 
-        {/* Bottom Section */}
-        <div className="absolute bottom-4 left-4 right-4">
-          <div className="bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 rounded-xl p-4 border border-purple-200/30 dark:border-purple-800/30">
-            <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Today's Progress
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 bg-purple-200 dark:bg-purple-800 rounded-full h-2">
-                <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 h-2 rounded-full w-3/4" />
-              </div>
-              <span className="text-sm font-semibold text-purple-600 dark:text-purple-400">75%</span>
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              6 of 8 habits completed
-            </div>
-          </div>
+        {/* Bottom Section - My Profile */}
+        <div className="absolute bottom-4 left-2 right-2">
+          <button
+            onClick={() => {
+              onViewChange('profile');
+              onToggle();
+            }}
+            className={`
+              w-full flex items-center gap-3 px-4 py-3 rounded-xl
+              transition-all duration-200 ease-in-out
+              group relative overflow-hidden
+              ${currentView === 'profile' 
+                ? 'bg-gradient-to-r from-purple-500 to-violet-600 text-white shadow-lg transform scale-105' 
+                : 'hover:bg-purple-50 dark:hover:bg-purple-900/30 text-gray-700 dark:text-gray-300'
+              }
+            `}
+          >
+            {/* Background animation */}
+            <div className={`
+              absolute inset-0 bg-gradient-to-r from-purple-500 to-violet-600 opacity-0
+              transition-opacity duration-200
+              ${currentView !== 'profile' ? 'group-hover:opacity-10' : ''}
+            `} />
+            
+            <User className={`w-6 h-6 ${currentView === 'profile' ? 'text-white' : 'text-purple-500 group-hover:text-purple-600 dark:group-hover:text-purple-400'} transition-colors`} />
+            <span className={`
+              font-medium text-lg
+              ${currentView === 'profile' ? 'text-white' : 'text-gray-700 dark:text-gray-300'}
+              group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors
+            `}>
+              My Profile
+            </span>
+            
+            {/* Active indicator */}
+            {currentView === 'profile' && (
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-l-full" />
+            )}
+          </button>
         </div>
       </div>
     </>

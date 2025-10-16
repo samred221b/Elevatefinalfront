@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useAuth } from '../../context/FirebaseAuthContext';
+import { useHabits } from '../../context/HabitContext';
+import { useNavigation } from '../../context/NavigationContext';
+import { ConfirmationModal } from '../ui/ConfirmationModal';
 import { 
-  Search, 
-  Bell, 
-  User, 
   Sun, 
   Moon, 
-  Filter,
   ArrowLeft,
-  Flame,
-  Trophy,
   LogOut,
+  Filter,
+  HelpCircle,
+  CreditCard,
+  Search,
+  Bell,
+  User,
   Settings
 } from 'lucide-react';
-import { useNavigation } from '../../context/NavigationContext';
-import { useAuth } from '../../context/AuthContext';
-import { useHabits } from '../../context/HabitContext';
-import { ConfirmationModal } from '../ui/ConfirmationModal';
 
 interface EnhancedTopNavProps {
   showSearch?: boolean;
@@ -32,8 +33,11 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
     isTransitioning 
   } = useNavigation();
   
-  const { user, logoutUser } = useAuth();
+  const { currentUser, logout, logoutLoading } = useAuth();
   const { settings, updateSettings } = useHabits();
+  
+  // State for logout confirmation
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   
   // Get current theme state
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -45,10 +49,7 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
   const [filterType, setFilterType] = useState<'all' | 'active' | 'completed' | 'pending'>('all');
-  const [currentStreak] = useState(5);
-  const [todayProgress] = useState(75);
   const toggleDarkMode = () => {
     const newTheme = isDarkMode ? 'light' : 'dark';
     setIsDarkMode(!isDarkMode);
@@ -86,7 +87,7 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (showUserDropdown && !target.closest('.user-dropdown')) {
+      if (showUserDropdown && !target.closest('.currentUser-dropdown')) {
         setShowUserDropdown(false);
       }
       if (showFilters && !target.closest('.filter-dropdown')) {
@@ -105,6 +106,8 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
       analytics: 'Analytics & Insights',
       calendar: 'Calendar View',
       profile: 'My Profile',
+      help: 'Help & Support',
+      billing: 'Billing & Subscriptions',
       settings: 'Settings',
       progress: 'Progress Tracking',
       badges: 'Achievements',
@@ -116,7 +119,7 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
   return (
     <>
       <div className="sticky top-0 z-30 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-purple-200/50 dark:border-purple-800/50">
-      <div className="flex items-center justify-between px-3 py-2 lg:px-6 lg:py-4 min-h-[60px]">
+        <div className="flex items-center justify-between px-3 py-2 lg:px-6 lg:py-4 min-h-[60px] lg:min-h-[70px]">
         {/* Left Section - Back Button & Title */}
         <div className="flex items-center gap-2 lg:gap-4 flex-1 min-w-0">
           {canGoBack && (
@@ -129,7 +132,7 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
           )}
           
           <div className="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
-            <h1 className={`text-base lg:text-xl font-bold text-gray-900 dark:text-gray-100 transition-all duration-300 truncate ${isTransitioning ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}>
+            <h1 className={`text-lg lg:text-xl xl:text-2xl font-bold text-gray-900 dark:text-gray-100 transition-all duration-300 truncate ${isTransitioning ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}>
               {getViewTitle(currentView)}
             </h1>
           </div>
@@ -172,35 +175,11 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
 
         {/* Right Section - Compact Actions */}
         <div className="flex items-center gap-1 lg:gap-3 flex-shrink-0">
-          {/* Quick Stats - Hidden on mobile, simplified on tablet */}
-          <div className="hidden lg:flex items-center gap-4 mr-4">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-orange-500/10 to-red-500/10 hover:from-orange-500/20 hover:to-red-500/20 transition-all duration-200 cursor-pointer group">
-              <Flame className="w-4 h-4 text-orange-600 dark:text-orange-400 group-hover:scale-110 transition-transform" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {currentStreak} day streak
-              </span>
-            </div>
-            
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-500/10 hover:from-emerald-500/20 hover:to-teal-500/20 transition-all duration-200 cursor-pointer group">
-              <Trophy className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {todayProgress}% today
-              </span>
-            </div>
-          </div>
 
-          {/* Mobile Search Button - Only visible on small screens */}
-          {showSearch && (
-            <button 
-              className="sm:hidden p-1.5 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors group"
-              title="Search"
-            >
-              <Search className="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
-            </button>
-          )}
+          {/* Mobile Search Button - Hidden */}
 
-          {/* Action Buttons - Compact on mobile */}
-          <div className="relative filter-dropdown">
+          {/* Action Buttons - Hidden on mobile */}
+          <div className="relative filter-dropdown hidden lg:block">
             <button 
               onClick={(e) => {
                 e.stopPropagation();
@@ -347,8 +326,8 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
 
           {/* Enhanced User Profile - Compact on mobile */}
           <div className="flex items-center gap-1 lg:gap-2 pl-1 lg:pl-2 border-l border-purple-200/50 dark:border-purple-800/50">
-            <div className="relative user-dropdown">
-              {user?.avatar ? (
+            <div className="relative currentUser-dropdown">
+              {currentUser?.photoURL ? (
                 <div className="relative">
                   <button
                     onClick={(e) => {
@@ -358,8 +337,8 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
                     className="block"
                   >
                     <img
-                      src={user.avatar}
-                      alt={user.name}
+                      src={currentUser.photoURL}
+                      alt={currentUser.displayName || currentUser.email || 'User'}
                       className="w-8 h-8 lg:w-10 lg:h-10 rounded-full border-2 border-white/20 hover:border-white/40 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl"
                     />
                   </button>
@@ -375,7 +354,7 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
                     className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-br from-slate-800 to-teal-500 flex items-center justify-center hover:scale-105 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl ring-2 ring-white/20 hover:ring-white/40"
                   >
                     <span className="text-white font-bold text-xs lg:text-sm">
-                      {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                      {currentUser?.displayName?.charAt(0)?.toUpperCase() || currentUser?.email?.charAt(0)?.toUpperCase() || 'U'}
                     </span>
                   </button>
                   <div className="absolute -bottom-0.5 -right-0.5 lg:-bottom-1 lg:-right-1 w-3 h-3 lg:w-4 lg:h-4 bg-green-400 border-2 border-white rounded-full animate-pulse"></div>
@@ -390,12 +369,12 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
                         <span className="text-white font-bold text-sm">
-                          {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                          {currentUser?.displayName?.charAt(0)?.toUpperCase() || currentUser?.email?.charAt(0)?.toUpperCase() || 'U'}
                         </span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 dark:text-gray-100 truncate">{user?.name}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100 truncate">{currentUser?.displayName || 'User'}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{currentUser?.email}</p>
                       </div>
                     </div>
                   </div>
@@ -411,6 +390,28 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
                     >
                       <User className="w-4 h-4" />
                       <span className="text-sm">Profile</span>
+                    </button>
+
+                    <button 
+                      onClick={() => {
+                        setShowUserDropdown(false);
+                        setCurrentView('help');
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center gap-3 text-blue-600 dark:text-blue-400"
+                    >
+                      <HelpCircle className="w-4 h-4" />
+                      <span className="text-sm">Help & Support</span>
+                    </button>
+
+                    <button 
+                      onClick={() => {
+                        setShowUserDropdown(false);
+                        setCurrentView('billing');
+                      }}
+                      className="w-full px-4 py-2 text-left hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors flex items-center gap-3 text-green-600 dark:text-green-400"
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      <span className="text-sm">Billing & Subscriptions</span>
                     </button>
 
                     <button 
@@ -433,13 +434,22 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
                     <button
                       onClick={() => {
                         setShowUserDropdown(false);
-                        // Show confirmation modal instead of direct logout
-                        setShowSignOutConfirm(true);
+                        setShowLogoutConfirm(true);
                       }}
-                      className="w-full px-4 py-2 text-left hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-3 text-red-600 dark:text-red-400"
+                      disabled={logoutLoading}
+                      className="w-full px-4 py-2 text-left hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-3 text-red-600 dark:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <LogOut className="w-4 h-4" />
-                      <span className="text-sm">Sign Out</span>
+                      {logoutLoading ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-red-600/30 border-t-red-600 rounded-full animate-spin" />
+                          <span className="text-sm">Signing Out...</span>
+                        </>
+                      ) : (
+                        <>
+                          <LogOut className="w-4 h-4" />
+                          <span className="text-sm">Sign Out</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -447,21 +457,27 @@ export function EnhancedTopNav({ showSearch = true }: EnhancedTopNavProps) {
             </div>
           </div>
         </div>
-      </div>
+        </div>
       </div>
 
-      {/* Sign Out Confirmation Modal - Outside main container */}
-      <ConfirmationModal
-        isOpen={showSignOutConfirm}
-        onClose={() => setShowSignOutConfirm(false)}
-        onConfirm={logoutUser}
-        title="Sign Out"
-        message="Are you sure you want to sign out? You'll need to log in again to access your habits."
-        confirmText="Sign Out"
-        cancelText="Cancel"
-        type="warning"
-        icon={<LogOut className="w-6 h-6" />}
-      />
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && createPortal(
+        <ConfirmationModal
+          isOpen={showLogoutConfirm}
+          onClose={() => setShowLogoutConfirm(false)}
+          onConfirm={() => {
+            setShowLogoutConfirm(false);
+            logout();
+          }}
+          title="Sign Out"
+          message="Are you sure you want to sign out? You'll need to log in again to access your habits."
+          confirmText="Sign Out"
+          cancelText="Cancel"
+          type="warning"
+          icon={<LogOut className="w-6 h-6" />}
+        />,
+        document.body
+      )}
     </>
   );
 }

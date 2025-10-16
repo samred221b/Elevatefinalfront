@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Habit } from '@/types'
 import { useHabits } from '@/context/HabitContext'
 import { Card } from './ui/card'
@@ -34,7 +35,7 @@ export function HabitCard({ habit, onEdit }: HabitCardProps) {
     <>
       <Card 
       className={cn(
-        'border border-gray-200 dark:border-gray-800 hover:shadow-sm transition-shadow duration-200',
+        'border border-gray-200 dark:border-gray-800 hover:shadow-sm transition-shadow duration-200 relative',
         isCompleted && 'bg-gray-50 dark:bg-gray-800/50'
       )}
     >
@@ -113,17 +114,29 @@ export function HabitCard({ habit, onEdit }: HabitCardProps) {
       )}
       </Card>
 
-      <ConfirmationModal
-        isOpen={showDeleteConfirm}
-        onClose={() => setShowDeleteConfirm(false)}
-        onConfirm={() => deleteHabit(habit.id)}
-        title="Delete Habit"
-        message={`Are you sure you want to delete "${habit.name}"? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
-        type="danger"
-        icon={<Trash2 className="w-6 h-6" />}
-      />
+      {/* Modal rendered as portal to document body */}
+      {showDeleteConfirm && createPortal(
+        <ConfirmationModal
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={async () => {
+            try {
+              await deleteHabit(habit.id);
+              setShowDeleteConfirm(false);
+            } catch (error) {
+              console.error('Failed to delete habit:', error);
+              // Keep modal open if deletion fails
+            }
+          }}
+          title="Delete Habit"
+          message={`Are you sure you want to delete "${habit.name}"? This action cannot be undone.`}
+          confirmText="Delete"
+          cancelText="Cancel"
+          type="danger"
+          icon={<Trash2 className="w-6 h-6" />}
+        />,
+        document.body
+      )}
     </>
   )
 }

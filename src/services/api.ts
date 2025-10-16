@@ -1,7 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { auth } from '../lib/firebase';
 
 // API Configuration
+// Priority: .env file -> localhost fallback
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+console.log('🌐 API Base URL:', API_BASE_URL);
+console.log('🔧 Environment:', import.meta.env.VITE_ENV || 'development');
 
 // Create axios instance
 const api: AxiosInstance = axios.create({
@@ -12,13 +17,27 @@ const api: AxiosInstance = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor to add Firebase auth token
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('elevate_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+  async (config) => {
+    try {
+      // Get the current user from Firebase
+      const user = auth.currentUser;
+      
+      if (user) {
+        // Get the ID token
+        const token = await user.getIdToken();
+        
+        // Add the token to the Authorization header
+        config.headers.Authorization = `Bearer ${token}`;
+        console.log('🔐 Added Firebase token to request:', config.url);
+      } else {
+        console.warn('⚠️ No Firebase user found for request:', config.url);
+      }
+    } catch (error) {
+      console.error('❌ Error getting Firebase token:', error);
     }
+    
     return config;
   },
   (error) => {
@@ -32,15 +51,7 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Handle auth errors
-    if (error.response?.status === 401) {
-      // Clear invalid token
-      localStorage.removeItem('elevate_token');
-      localStorage.removeItem('elevate_user');
-      // Redirect to login if needed
-      window.location.href = '/?login=true';
-    }
-    
+    // Simple error logging - no auth redirects with Firebase
     console.error('API Error:', error);
     return Promise.reject(error);
   }

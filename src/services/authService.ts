@@ -42,42 +42,93 @@ export const authService = {
       const response = await apiRequest.post<AuthResponse>('/auth/login', credentials);
       
       console.log('📡 Login response:', response);
-      
       if (response.success && response.data) {
         // Store token and user data
         localStorage.setItem('elevate_token', response.data.token);
         localStorage.setItem('elevate_user', JSON.stringify(response.data.user));
         console.log('💾 Stored user data and token');
+        return response;
       }
       
       return response;
     } catch (error: any) {
-      console.error('❌ Login service error:', error);
-      console.error('❌ Error response:', error.response?.data);
+      console.error('❌ Login error:', error);
+      
+      // Check if it's an email verification error
+      if (error.response?.data?.requiresVerification) {
+        throw {
+          message: error.response.data.message,
+          requiresVerification: true,
+          email: error.response.data.email
+        };
+      }
+      
       console.error('❌ Error status:', error.response?.status);
       console.error('❌ Error config:', error.config);
       throw new Error(error.response?.data?.message || error.message || 'Login failed');
     }
   },
-
-  // Register user
-  async register(userData: RegisterRequest): Promise<ApiResponse<AuthResponse>> {
+  async register(userData: RegisterRequest): Promise<ApiResponse<any>> {
     try {
       console.log('📝 Registering user:', userData.email);
       
-      const response = await apiRequest.post<AuthResponse>('/auth/register', userData);
+      const response = await apiRequest.post<any>('/auth/register', userData);
       
-      if (response.success && response.data) {
-        // Store token and user data
-        localStorage.setItem('elevate_token', response.data.token);
-        localStorage.setItem('elevate_user', JSON.stringify(response.data.user));
-        console.log('✅ Registration successful, data stored');
+      console.log('📡 Registration response:', response);
+      
+      // New flow: Registration returns verification requirement, not immediate login
+      if (response.success && response.data?.requiresVerification) {
+        console.log('✅ Registration successful, email verification required');
+        return response;
       }
       
       return response;
     } catch (error: any) {
       console.error('❌ Registration failed:', error.response?.data || error.message);
       throw new Error(error.response?.data?.message || error.message || 'Registration failed');
+    }
+  },
+
+  // Verify email with code
+  async verifyEmail(email: string, code: string): Promise<ApiResponse<AuthResponse>> {
+    try {
+      console.log('🔐 Verifying email:', email);
+      
+      const response = await apiRequest.post<AuthResponse>('/auth/verify-email', {
+        email,
+        code
+      });
+      
+      console.log('📡 Verification response:', response);
+      
+      if (response.success && response.data) {
+        // Store token and user data after successful verification
+        localStorage.setItem('elevate_token', response.data.token);
+        localStorage.setItem('elevate_user', JSON.stringify(response.data.user));
+        console.log('✅ Email verified, user logged in');
+      }
+      
+      return response;
+    } catch (error: any) {
+      console.error('❌ Email verification failed:', error.response?.data || error.message);
+      throw new Error(error.response?.data?.message || error.message || 'Email verification failed');
+    }
+  },
+
+  // Resend verification code
+  async resendVerificationCode(email: string): Promise<ApiResponse<any>> {
+    try {
+      console.log('📧 Resending verification code to:', email);
+      
+      const response = await apiRequest.post<any>('/auth/resend-verification', {
+        email
+      });
+      
+      console.log('📡 Resend response:', response);
+      return response;
+    } catch (error: any) {
+      console.error('❌ Resend verification failed:', error.response?.data || error.message);
+      throw new Error(error.response?.data?.message || error.message || 'Failed to resend verification code');
     }
   },
 

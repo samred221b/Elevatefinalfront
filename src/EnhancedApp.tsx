@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { HabitProvider, useHabits } from './context/HabitContext';
-import { FilterState } from './components/SearchFilter';
+import { FilterState } from './types/filters';
 import { CategorySection } from './components/CategorySection';
 import { AddCategoryDialog } from './components/AddCategoryDialog';
 import { AddHabitDialog } from './components/AddHabitDialog';
@@ -159,6 +159,7 @@ function AppContent() {
                     <CategorySection
                       key={category.id}
                       category={category}
+                      filters={filters}
                       onEditCategory={(cat) => { setEditCategory(cat); setShowCategoryDialog(true); }}
                       onDeleteCategory={async (cat) => {
                         // Note: This is a simplified version - use SuperEnhancedApp for full functionality

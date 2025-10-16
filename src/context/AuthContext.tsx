@@ -7,7 +7,8 @@ interface AuthContextType {
   isAuthLoading: boolean;
   isLoggingOut: boolean;
   authenticateUser: (email: string, password: string) => Promise<boolean>;
-  registerUser: (name: string, email: string, password: string) => Promise<boolean>;
+  registerUser: (name: string, email: string, password: string) => Promise<any>;
+  verifyEmail: (email: string, code: string) => Promise<boolean>;
   logoutUser: () => void;
   error: string | null;
   clearError: () => void;
@@ -45,20 +46,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const authenticateUser = async (email: string, password: string): Promise<boolean> => {
     setIsAuthLoading(true);
-    setError(null);
+    // Don't clear error immediately - let it persist
+    // setError(null);
 
     try {
       const response = await authService.login({ email, password });
       
+      console.log('🔍 Full login response:', response);
+      
       if (response.success && response.data) {
         setUser(response.data.user);
+        setError(null); // Only clear error on successful login
         console.log('✅ Login successful:', response.data.user.email);
         return true;
       } else {
-        setError(response.message || 'Login failed');
+        console.log('❌ Login failed - Response:', response);
+        setError(response.message || 'Invalid email or password. Please check your credentials and try again.');
         return false;
       }
-    } catch (error) {
+    } catch (error: any) {
+      // Check if it's an email verification error
+      if (error.requiresVerification) {
+        const verificationMessage = `Please verify your email before logging in. Check your inbox for a verification code.`;
+        setError(verificationMessage);
+        console.log('🔐 Email verification required - error set and persisted');
+        // Return the error object so the component can handle verification
+        throw error;
+      }
+      
       const errorMessage = error instanceof Error ? error.message : 'Login failed';
       setError(errorMessage);
       console.error('❌ Login error:', error);
@@ -68,25 +83,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const registerUser = async (name: string, email: string, password: string): Promise<boolean> => {
+  const registerUser = async (name: string, email: string, password: string): Promise<any> => {
     setError(null);
 
     try {
       const response = await authService.register({ name, email, password });
       
       if (response.success && response.data) {
-        setUser(response.data.user);
-        console.log('✅ Registration successful, user logged in:', response.data.user.email);
-        return true;
+        console.log('✅ Registration successful, verification required');
+        // Return the response data for verification handling
+        return response.data;
       } else {
         const errorMsg = response.message || 'Registration failed';
         setError(errorMsg);
-        return false;
+        return null;
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Registration failed';
       setError(errorMessage);
+      return null;
+    }
+  };
+
+  // Add email verification function
+  const verifyEmail = async (email: string, code: string): Promise<boolean> => {
+    setIsAuthLoading(true);
+    setError(null);
+
+    try {
+      const response = await authService.verifyEmail(email, code);
+      
+      if (response.success && response.data) {
+        setUser(response.data.user);
+        console.log('✅ Email verified, user logged in:', response.data.user.email);
+        return true;
+      } else {
+        setError(response.message || 'Email verification failed');
+        return false;
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Email verification failed';
+      setError(errorMessage);
       return false;
+    } finally {
+      setIsAuthLoading(false);
     }
   };
 
@@ -118,6 +158,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoggingOut,
     authenticateUser,
     registerUser,
+    verifyEmail,
     logoutUser,
     error,
     clearError,

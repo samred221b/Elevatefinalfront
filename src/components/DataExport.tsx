@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useHabits } from '@/context/HabitContext'
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from './ui/card'
 import { Button } from './ui/button'
+import { ConfirmationModal } from './ui/ConfirmationModal'
 import { Download, Upload, FileJson, FileSpreadsheet, Trash2, Database, Shield, Zap } from 'lucide-react'
 
 export function DataExport() {
-  const { categories, habits, logs, badges } = useHabits()
-  // Future feature: file import functionality
-  // const [importFile, setImportFile] = useState<File | null>(null)
+  const { categories, habits, logs, badges, deleteCategory, deleteHabit, refreshData, addCategory, addHabit } = useHabits()
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
+  const [showImportConfirm, setShowImportConfirm] = useState(false)
+  const [importData, setImportData] = useState<any>(null)
 
   const exportToJSON = () => {
     const data = {
@@ -71,26 +74,96 @@ export function DataExport() {
       const text = await file.text()
       const data = JSON.parse(text)
 
-      if (window.confirm('This will replace all your current data. Are you sure?')) {
-        localStorage.setItem('habit-tracker-categories', JSON.stringify(data.categories || []))
-        localStorage.setItem('habit-tracker-habits', JSON.stringify(data.habits || []))
-        localStorage.setItem('habit-tracker-logs', JSON.stringify(data.logs || []))
-        localStorage.setItem('habit-tracker-badges', JSON.stringify(data.badges || []))
-        
-        window.location.reload()
+      // Validate the imported data structure
+      if (!data.categories || !data.habits || !Array.isArray(data.categories) || !Array.isArray(data.habits)) {
+        alert('Invalid backup file format. Please make sure you\'re importing a valid habit tracker backup.')
+        return
       }
+
+      setImportData(data)
+      setShowImportConfirm(true)
     } catch (error) {
-      alert('Error importing file. Please make sure it\'s a valid backup file.')
+      alert('Error reading file. Please make sure it\'s a valid JSON backup file.')
       console.error(error)
     }
   }
 
-  const clearAllData = () => {
-    if (window.confirm('⚠️ This will delete ALL your data permanently. This cannot be undone. Are you absolutely sure?')) {
-      if (window.confirm('Last chance! This will erase everything. Continue?')) {
-        localStorage.clear()
-        window.location.reload()
+  const performImport = async () => {
+    if (!importData) return
+
+    try {
+      // First clear existing data if user wants to replace everything
+      await clearAllData()
+
+      // Create a mapping of old category IDs to new ones
+      const categoryIdMap = new Map<string, string>()
+
+      // Import categories first
+      for (const category of importData.categories) {
+        try {
+          const newCategoryId = await addCategory({
+            name: category.name,
+            description: category.description || '',
+            color: category.color,
+            icon: category.icon || '📝'
+          })
+          if (newCategoryId) {
+            categoryIdMap.set(category.id, newCategoryId)
+          }
+        } catch (error) {
+          console.error('Error importing category:', category.name, error)
+        }
       }
+
+      // Import habits with updated category IDs
+      for (const habit of importData.habits) {
+        try {
+          const newCategoryId = categoryIdMap.get(habit.categoryId)
+          if (newCategoryId) {
+            await addHabit({
+              name: habit.name,
+              description: habit.description || '',
+              icon: habit.icon,
+              color: habit.color,
+              categoryId: newCategoryId,
+              frequency: habit.frequency || 'daily',
+              reminderEnabled: habit.reminderEnabled || false,
+              reminderTime: habit.reminderTime || ''
+            })
+          }
+        } catch (error) {
+          console.error('Error importing habit:', habit.name, error)
+        }
+      }
+
+      // Refresh data to update UI
+      await refreshData()
+
+      alert(`Import completed successfully! Imported ${importData.categories.length} categories and ${importData.habits.length} habits.`)
+    } catch (error) {
+      console.error('Error during import:', error)
+      alert('Error occurred during import. Some data may not have been imported correctly.')
+    }
+  }
+
+  const clearAllData = async () => {
+    try {
+      // Delete all habits first (which will also delete their logs)
+      for (const habit of habits) {
+        await deleteHabit(habit.id)
+      }
+      
+      // Delete all categories
+      for (const category of categories) {
+        await deleteCategory(category.id)
+      }
+      
+      // Refresh data to update UI
+      await refreshData()
+      
+      console.log('✅ All habit data cleared successfully')
+    } catch (error) {
+      console.error('❌ Error clearing data:', error)
     }
   }
 
@@ -260,7 +333,7 @@ export function DataExport() {
               </div>
             </div>
             <Button
-              onClick={clearAllData}
+              onClick={() => setShowClearConfirm(true)}
               className="gap-2 bg-red-600 hover:bg-red-700 text-white shadow-xl border-2 border-red-400 relative z-10"
             >
               <Trash2 className="w-4 h-4" />
@@ -269,6 +342,63 @@ export function DataExport() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Clear All Confirmation Modal */}
+      {showClearConfirm && createPortal(
+        <ConfirmationModal
+          isOpen={showClearConfirm}
+          onClose={() => setShowClearConfirm(false)}
+          onConfirm={() => {
+            setShowClearConfirm(false)
+            clearAllData()
+          }}
+          title="Clear All Data"
+          message={`⚠️ This will permanently delete ALL your habit data including:
+
+• ${categories.length} categories
+• ${habits.length} habits  
+• ${logs.length} habit logs
+• ${badges.length} badges
+
+This action cannot be undone! Are you absolutely sure?`}
+          confirmText="Delete Everything"
+          cancelText="Cancel"
+          type="danger"
+          icon={<Trash2 className="w-6 h-6" />}
+        />,
+        document.body
+      )}
+
+      {/* Import Confirmation Modal */}
+      {showImportConfirm && importData && createPortal(
+        <ConfirmationModal
+          isOpen={showImportConfirm}
+          onClose={() => {
+            setShowImportConfirm(false)
+            setImportData(null)
+          }}
+          onConfirm={() => {
+            setShowImportConfirm(false)
+            performImport()
+          }}
+          title="Import Backup Data"
+          message={`📥 This will replace ALL your current data with the backup file containing:
+
+• ${importData.categories?.length || 0} categories
+• ${importData.habits?.length || 0} habits
+• ${importData.logs?.length || 0} habit logs (logs will not be imported)
+• Export date: ${importData.exportDate ? new Date(importData.exportDate).toLocaleDateString() : 'Unknown'}
+
+⚠️ Your current data will be permanently deleted and replaced. This cannot be undone!
+
+Continue with import?`}
+          confirmText="Import Data"
+          cancelText="Cancel"
+          type="warning"
+          icon={<Upload className="w-6 h-6" />}
+        />,
+        document.body
+      )}
     </div>
   )
 }

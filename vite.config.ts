@@ -31,7 +31,7 @@ export default defineConfig({
     allowedHosts: [
       'localhost',
       '127.0.0.1',
-      'elevate-production.up.railway.app',
+      'elevate1-production.up.railway.app',
       '.railway.app',
       '.up.railway.app'
     ],
@@ -43,7 +43,7 @@ export default defineConfig({
     allowedHosts: [
       'localhost',
       '127.0.0.1',
-      'elevate-production.up.railway.app',
+      'elevate1-production.up.railway.app',
       '.railway.app',
       '.up.railway.app'
     ],

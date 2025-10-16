@@ -61,7 +61,7 @@ export function Logo({ size = 'md', className = '', showFallback = true }: LogoP
           <img 
             src={logoSources[currentSourceIndex]}
             alt="Elevate Logo" 
-            className="w-4/5 h-4/5 object-contain drop-shadow-sm"
+            className="w-4/5 h-4/5 object-contain drop-shadow-sm dark:invert"
             onError={handleNextSource}
             onLoad={handleImageLoad}
             style={{ display: imageLoaded ? 'block' : 'none' }}
