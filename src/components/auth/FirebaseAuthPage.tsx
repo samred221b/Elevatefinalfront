@@ -9,12 +9,25 @@ type AuthView = 'login' | 'register' | 'forgot-password' | 'verify-email'
 export function FirebaseAuthPage() {
   const [currentView, setCurrentView] = useState<AuthView>('login')
   const [verificationEmail, setVerificationEmail] = useState('')
-  const [isAnimating, setIsAnimating] = useState(true)
+  const [isAnimating, setIsAnimating] = useState(false)
 
   // Trigger entrance animation on mount
   useEffect(() => {
-    setIsAnimating(true)
+    // Small delay to ensure DOM is ready, then trigger animation
+    const timer = setTimeout(() => {
+      setIsAnimating(true)
+    }, 50)
+    return () => clearTimeout(timer)
   }, [])
+
+  // Re-trigger animation when view changes
+  useEffect(() => {
+    setIsAnimating(false)
+    const timer = setTimeout(() => {
+      setIsAnimating(true)
+    }, 50)
+    return () => clearTimeout(timer)
+  }, [currentView])
 
   const renderAuthForm = () => {
     switch (currentView) {
