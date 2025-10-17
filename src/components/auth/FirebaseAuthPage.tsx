@@ -32,7 +32,7 @@ export function FirebaseAuthPage() {
       const timer = setTimeout(() => {
         setIsRightAnimating(true)
         setIsTransitioning(false)
-      }, 300)
+      }, 600) // Increased from 300ms to 600ms for smoother transition
       return () => clearTimeout(timer)
     }
   }, [currentView, isTransitioning, isInitialLoad])
@@ -298,7 +298,7 @@ export function FirebaseAuthPage() {
       </div>
 
       {/* Right Side - Spectacular Creative Background */}
-      <div className={`w-full lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 transition-all duration-1200 ease-out ${
+      <div className={`w-full lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 transition-all duration-1500 ease-in-out ${
         isRightAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
       }`}>
         {/* Amazing Multi-Dimensional Background */}
@@ -378,7 +378,7 @@ export function FirebaseAuthPage() {
         <div className="relative z-10 flex items-center justify-center min-h-full">
           <div className="w-full max-w-4xl px-8 lg:px-16">
             {/* Auth Form - Centered */}
-            <div className={`flex items-center justify-center min-h-full transition-all duration-1000 delay-300 ease-out ${
+            <div className={`flex items-center justify-center min-h-full transition-all duration-1200 delay-400 ease-in-out ${
               isRightAnimating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
             }`}>
               {renderAuthForm()}
