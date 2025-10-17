@@ -10,6 +10,7 @@ export function FirebaseAuthPage() {
   const [currentView, setCurrentView] = useState<AuthView>('login')
   const [verificationEmail, setVerificationEmail] = useState('')
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   // Trigger entrance animation on mount
   useEffect(() => {
@@ -20,45 +21,56 @@ export function FirebaseAuthPage() {
     return () => clearTimeout(timer)
   }, [])
 
-  // Re-trigger animation when view changes
+  // Smooth transition when view changes
   useEffect(() => {
-    setIsAnimating(false)
-    const timer = setTimeout(() => {
-      setIsAnimating(true)
-    }, 50)
-    return () => clearTimeout(timer)
-  }, [currentView])
+    if (isTransitioning) {
+      // First fade out
+      setIsAnimating(false)
+      const timer = setTimeout(() => {
+        // Then fade back in after content change
+        setIsAnimating(true)
+        setIsTransitioning(false)
+      }, 300) // Longer delay for smoother transition
+      return () => clearTimeout(timer)
+    }
+  }, [currentView, isTransitioning])
+
+  // Custom view change handler with smooth transition
+  const handleViewChange = (newView: AuthView) => {
+    setIsTransitioning(true)
+    setCurrentView(newView)
+  }
 
   const renderAuthForm = () => {
     switch (currentView) {
       case 'login':
         return (
           <FirebaseLoginForm
-            onSwitchToRegister={() => setCurrentView('register')}
-            onSwitchToForgotPassword={() => setCurrentView('forgot-password')}
+            onSwitchToRegister={() => handleViewChange('register')}
+            onSwitchToForgotPassword={() => handleViewChange('forgot-password')}
           />
         )
       case 'register':
         return (
           <FirebaseRegisterForm
-            onSwitchToLogin={() => setCurrentView('login')}
+            onSwitchToLogin={() => handleViewChange('login')}
             onVerificationSent={(email) => {
               setVerificationEmail(email)
-              setCurrentView('verify-email')
+              handleViewChange('verify-email')
             }}
           />
         )
       case 'forgot-password':
         return (
           <FirebaseForgotPasswordForm
-            onBackToLogin={() => setCurrentView('login')}
+            onBackToLogin={() => handleViewChange('login')}
           />
         )
       case 'verify-email':
         return (
           <EmailVerificationScreen
             email={verificationEmail}
-            onBackToLogin={() => setCurrentView('login')}
+            onBackToLogin={() => handleViewChange('login')}
           />
         )
       default:
