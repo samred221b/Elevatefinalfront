@@ -297,59 +297,81 @@ export function FirebaseAuthPage() {
         </div>
       </div>
 
-      {/* Right Side - Ultra Creative Artistic Background */}
+      {/* Right Side - Spectacular Creative Background */}
       <div className={`w-full lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 transition-all duration-1200 ease-out ${
         isRightAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
       }`}>
-        {/* Sophisticated Multi-layered Background Design */}
+        {/* Amazing Multi-Dimensional Background */}
         <div className="absolute inset-0">
-          {/* Primary Artistic Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-violet-100/50 via-transparent to-blue-200/40 dark:from-violet-900/30 dark:to-blue-900/25"></div>
-          <div className="absolute inset-0 bg-gradient-to-bl from-purple-100/35 via-transparent to-pink-100/45 dark:from-purple-900/20 dark:to-pink-900/25"></div>
-          <div className="absolute inset-0 bg-gradient-to-tl from-cyan-100/25 via-transparent to-indigo-100/35 dark:from-cyan-900/15 dark:to-indigo-900/20"></div>
+          {/* Dynamic Gradient Waves */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 via-purple-500/15 to-pink-400/20 dark:from-blue-600/30 dark:via-purple-700/25 dark:to-pink-600/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-tl from-cyan-300/25 via-violet-400/20 to-amber-300/15 dark:from-cyan-500/35 dark:via-violet-600/30 dark:to-amber-500/25"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-emerald-300/20 via-blue-400/25 to-indigo-500/20 dark:from-emerald-500/30 dark:via-blue-600/35 dark:to-indigo-700/30"></div>
           
-          {/* Large Artistic Orbs */}
-          <div className="absolute -top-20 -right-20 w-[500px] h-[500px] bg-gradient-to-bl from-blue-200/15 via-indigo-200/20 to-transparent rounded-full blur-3xl dark:from-blue-800/8 dark:via-indigo-800/12"></div>
-          <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-gradient-to-tr from-purple-200/20 via-violet-200/25 to-transparent rounded-full blur-3xl dark:from-purple-800/12 dark:via-violet-800/15"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-gradient-to-r from-pink-200/10 via-rose-200/15 to-transparent rounded-full blur-2xl dark:from-pink-800/6 dark:via-rose-800/10"></div>
+          {/* Floating Geometric Crystals */}
+          <div className="absolute top-20 right-20 w-32 h-32 bg-gradient-to-br from-blue-400/30 to-cyan-500/40 rounded-2xl rotate-45 shadow-2xl backdrop-blur-sm border border-white/20 dark:border-white/10 animate-pulse"></div>
+          <div className="absolute bottom-32 left-16 w-24 h-24 bg-gradient-to-tl from-purple-400/35 to-pink-500/45 rounded-xl -rotate-12 shadow-xl backdrop-blur-sm border border-white/25 dark:border-white/15"></div>
+          <div className="absolute top-1/3 left-8 w-20 h-20 bg-gradient-to-r from-violet-400/40 to-indigo-500/50 rounded-full shadow-lg backdrop-blur-sm border border-white/30 dark:border-white/20"></div>
+          <div className="absolute bottom-1/4 right-12 w-28 h-28 bg-gradient-to-bl from-emerald-400/30 to-teal-500/40 rounded-3xl rotate-12 shadow-xl backdrop-blur-sm border border-white/20 dark:border-white/10"></div>
           
-          {/* Geometric Art Pieces */}
-          <div className="absolute top-16 right-24 w-40 h-40 bg-gradient-to-br from-blue-300/8 to-cyan-300/12 rounded-[2rem] rotate-12 blur-sm dark:from-blue-700/5 dark:to-cyan-700/8"></div>
-          <div className="absolute bottom-24 right-12 w-32 h-32 bg-gradient-to-tl from-purple-300/12 to-pink-300/8 rounded-[1.5rem] -rotate-12 blur-sm dark:from-purple-700/8 dark:to-pink-700/5"></div>
-          <div className="absolute top-1/3 right-6 w-20 h-20 bg-gradient-to-br from-violet-300/15 to-indigo-300/10 rounded-full blur-sm dark:from-violet-700/10 dark:to-indigo-700/6"></div>
-          <div className="absolute bottom-1/3 left-8 w-28 h-28 bg-gradient-to-tr from-cyan-300/10 to-blue-300/15 rounded-[1.2rem] rotate-45 blur-sm dark:from-cyan-700/6 dark:to-blue-700/10"></div>
+          {/* Magical Orbs with Glow */}
+          <div className="absolute -top-10 -right-10 w-[400px] h-[400px] bg-gradient-to-bl from-blue-500/20 via-purple-500/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-20 -left-20 w-[350px] h-[350px] bg-gradient-to-tr from-pink-500/25 via-rose-500/35 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] bg-gradient-to-r from-cyan-500/15 via-blue-500/25 to-transparent rounded-full blur-xl animate-pulse"></div>
           
-          {/* Sophisticated Pattern Overlays */}
-          <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03]" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(99, 102, 241, 0.4) 1px, transparent 0)`,
-            backgroundSize: '32px 32px'
-          }}></div>
-          <div className="absolute inset-0 opacity-[0.01] dark:opacity-[0.02]" style={{
-            backgroundImage: `linear-gradient(45deg, rgba(139, 92, 246, 0.1) 25%, transparent 25%), linear-gradient(-45deg, rgba(139, 92, 246, 0.1) 25%, transparent 25%)`,
+          {/* Animated Particles */}
+          <div className="absolute top-16 left-24 w-3 h-3 bg-blue-400 rounded-full animate-bounce shadow-lg"></div>
+          <div className="absolute top-40 right-32 w-2 h-2 bg-purple-400 rounded-full animate-ping shadow-md"></div>
+          <div className="absolute bottom-20 left-20 w-4 h-4 bg-cyan-400 rounded-full animate-pulse shadow-lg"></div>
+          <div className="absolute bottom-40 right-16 w-2 h-2 bg-pink-400 rounded-full animate-bounce shadow-md"></div>
+          <div className="absolute top-1/2 right-8 w-3 h-3 bg-violet-400 rounded-full animate-ping shadow-lg"></div>
+          <div className="absolute top-3/4 left-12 w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-md"></div>
+          
+          {/* Flowing Lines */}
+          <div className="absolute top-0 left-0 w-full h-full opacity-30">
+            <svg className="w-full h-full" viewBox="0 0 400 600" fill="none">
+              <path d="M0,300 Q200,100 400,300 T800,300" stroke="url(#gradient1)" strokeWidth="2" fill="none" opacity="0.6"/>
+              <path d="M0,200 Q200,400 400,200 T800,200" stroke="url(#gradient2)" strokeWidth="1.5" fill="none" opacity="0.5"/>
+              <path d="M0,400 Q200,200 400,400 T800,400" stroke="url(#gradient3)" strokeWidth="1" fill="none" opacity="0.4"/>
+              <defs>
+                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.8"/>
+                  <stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.6"/>
+                  <stop offset="100%" stopColor="#EC4899" stopOpacity="0.4"/>
+                </linearGradient>
+                <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#06B6D4" stopOpacity="0.7"/>
+                  <stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.5"/>
+                  <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.3"/>
+                </linearGradient>
+                <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#10B981" stopOpacity="0.6"/>
+                  <stop offset="50%" stopColor="#3B82F6" stopOpacity="0.4"/>
+                  <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.2"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          
+          {/* Hexagonal Pattern */}
+          <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.4'%3E%3Cpath d='M30 30l15-15v30l-15-15zm0 0l-15-15v30l15-15z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
             backgroundSize: '60px 60px'
           }}></div>
           
-          {/* Artistic Floating Elements */}
-          <div className="absolute top-20 left-20 w-8 h-8 bg-gradient-to-br from-blue-400/15 to-cyan-400/10 rounded-full blur-sm dark:from-blue-600/10 dark:to-cyan-600/6"></div>
-          <div className="absolute top-32 right-40 w-6 h-6 bg-gradient-to-br from-purple-400/20 to-pink-400/15 rounded-full blur-sm dark:from-purple-600/12 dark:to-pink-600/8"></div>
-          <div className="absolute bottom-32 left-16 w-10 h-10 bg-gradient-to-br from-violet-400/12 to-indigo-400/18 rounded-full blur-sm dark:from-violet-600/8 dark:to-indigo-600/12"></div>
-          <div className="absolute bottom-16 right-32 w-7 h-7 bg-gradient-to-br from-cyan-400/18 to-blue-400/12 rounded-full blur-sm dark:from-cyan-600/12 dark:to-blue-600/8"></div>
-          <div className="absolute top-2/3 left-12 w-5 h-5 bg-gradient-to-br from-rose-400/15 to-pink-400/10 rounded-full blur-sm dark:from-rose-600/10 dark:to-pink-600/6"></div>
-          <div className="absolute top-1/4 right-16 w-9 h-9 bg-gradient-to-br from-indigo-400/10 to-purple-400/15 rounded-full blur-sm dark:from-indigo-600/6 dark:to-purple-600/10"></div>
+          {/* Prismatic Light Effects */}
+          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-conic from-blue-500/20 via-purple-500/30 via-pink-500/20 via-cyan-500/25 to-blue-500/20 rounded-full blur-2xl animate-spin" style={{ animationDuration: '20s' }}></div>
+          <div className="absolute bottom-1/3 left-1/3 w-48 h-48 bg-gradient-conic from-emerald-500/15 via-blue-500/25 via-violet-500/20 via-pink-500/15 to-emerald-500/15 rounded-full blur-xl animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }}></div>
           
-          {/* Abstract Artistic Shapes */}
-          <div className="absolute top-1/5 left-6 w-24 h-48 bg-gradient-to-b from-indigo-200/6 via-purple-200/10 to-violet-200/8 rounded-full blur-lg transform -rotate-45 dark:from-indigo-800/4 dark:via-purple-800/6 dark:to-violet-800/5"></div>
-          <div className="absolute bottom-1/5 right-8 w-20 h-40 bg-gradient-to-t from-blue-200/8 via-cyan-200/12 to-indigo-200/6 rounded-full blur-lg transform rotate-30 dark:from-blue-800/5 dark:via-cyan-800/8 dark:to-indigo-800/4"></div>
-          <div className="absolute top-1/2 left-4 w-16 h-32 bg-gradient-to-b from-pink-200/10 via-rose-200/6 to-purple-200/12 rounded-full blur-lg transform rotate-60 dark:from-pink-800/6 dark:via-rose-800/4 dark:to-purple-800/8"></div>
+          {/* Floating Cards */}
+          <div className="absolute top-12 left-12 w-16 h-24 bg-white/10 dark:bg-white/5 backdrop-blur-md rounded-lg border border-white/20 dark:border-white/10 shadow-xl rotate-12 hover:rotate-6 transition-transform duration-500"></div>
+          <div className="absolute bottom-16 right-20 w-20 h-12 bg-white/15 dark:bg-white/8 backdrop-blur-md rounded-lg border border-white/25 dark:border-white/15 shadow-lg -rotate-6 hover:rotate-0 transition-transform duration-500"></div>
+          <div className="absolute top-2/3 left-6 w-12 h-16 bg-white/12 dark:bg-white/6 backdrop-blur-md rounded-lg border border-white/20 dark:border-white/10 shadow-md rotate-45 hover:rotate-30 transition-transform duration-500"></div>
           
-          {/* Sophisticated Mesh Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-violet-100/3 to-transparent dark:via-violet-900/6"></div>
-          <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-blue-100/5 to-transparent dark:via-blue-900/4"></div>
-          <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-purple-100/4 to-transparent dark:via-purple-900/7"></div>
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent via-indigo-100/6 to-transparent dark:via-indigo-900/5"></div>
-          
-          {/* Final Artistic Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.01] to-transparent dark:via-black/[0.02]"></div>
+          {/* Mesh Gradient Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent dark:via-white/[0.01]"></div>
+          <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-blue-500/[0.03] to-transparent dark:via-blue-400/[0.02]"></div>
+          <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-purple-500/[0.02] to-transparent dark:via-purple-400/[0.01]"></div>
         </div>
         
         {/* Content Container */}
