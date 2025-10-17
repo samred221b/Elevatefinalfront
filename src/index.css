@@ -70,6 +70,133 @@
   100% { background-position: 200% 0; }
 }
 
+/* Ultra-Advanced Login Background Animations */
+@keyframes dash {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 20; }
+}
+
+@keyframes floatAdvanced {
+  0%, 100% { 
+    transform: translateY(0px) translateX(0px) rotate(0deg); 
+  }
+  25% { 
+    transform: translateY(-15px) translateX(5px) rotate(2deg); 
+  }
+  50% { 
+    transform: translateY(-8px) translateX(-3px) rotate(-1deg); 
+  }
+  75% { 
+    transform: translateY(-12px) translateX(8px) rotate(1.5deg); 
+  }
+}
+
+@keyframes morphBackground {
+  0%, 100% { 
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; 
+    transform: rotate(0deg) scale(1);
+  }
+  25% { 
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; 
+    transform: rotate(90deg) scale(1.05);
+  }
+  50% { 
+    border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; 
+    transform: rotate(180deg) scale(0.95);
+  }
+  75% { 
+    border-radius: 60% 40% 60% 30% / 40% 50% 60% 50%; 
+    transform: rotate(270deg) scale(1.02);
+  }
+}
+
+@keyframes energyFlow {
+  0% { 
+    transform: translateX(-100%) scale(0.8); 
+    opacity: 0; 
+  }
+  50% { 
+    transform: translateX(0%) scale(1); 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translateX(100%) scale(0.8); 
+    opacity: 0; 
+  }
+}
+
+@keyframes crystalPulse {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg); 
+    filter: brightness(1) saturate(1); 
+  }
+  25% { 
+    transform: scale(1.05) rotate(5deg); 
+    filter: brightness(1.1) saturate(1.2); 
+  }
+  50% { 
+    transform: scale(1.1) rotate(0deg); 
+    filter: brightness(1.2) saturate(1.4); 
+  }
+  75% { 
+    transform: scale(1.05) rotate(-5deg); 
+    filter: brightness(1.1) saturate(1.2); 
+  }
+}
+
+@keyframes particleFloat {
+  0%, 100% { 
+    transform: translateY(0px) translateX(0px) scale(1); 
+    opacity: 0.8; 
+  }
+  33% { 
+    transform: translateY(-20px) translateX(10px) scale(1.2); 
+    opacity: 1; 
+  }
+  66% { 
+    transform: translateY(-10px) translateX(-15px) scale(0.9); 
+    opacity: 0.9; 
+  }
+}
+
+@keyframes prismRotate {
+  0% { 
+    transform: rotate(0deg) scale(1); 
+    filter: hue-rotate(0deg) brightness(1); 
+  }
+  25% { 
+    transform: rotate(90deg) scale(1.1); 
+    filter: hue-rotate(90deg) brightness(1.2); 
+  }
+  50% { 
+    transform: rotate(180deg) scale(0.9); 
+    filter: hue-rotate(180deg) brightness(1.1); 
+  }
+  75% { 
+    transform: rotate(270deg) scale(1.05); 
+    filter: hue-rotate(270deg) brightness(1.15); 
+  }
+  100% { 
+    transform: rotate(360deg) scale(1); 
+    filter: hue-rotate(360deg) brightness(1); 
+  }
+}
+
+@keyframes glassShimmer {
+  0% { 
+    background-position: -200% 0; 
+    opacity: 0.5; 
+  }
+  50% { 
+    background-position: 0% 0; 
+    opacity: 0.8; 
+  }
+  100% { 
+    background-position: 200% 0; 
+    opacity: 0.5; 
+  }
+}
+
 /* Glassmorphism utilities */
 .glass {
   background: rgba(255, 255, 255, 0.1);
