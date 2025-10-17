@@ -9,31 +9,33 @@ type AuthView = 'login' | 'register' | 'forgot-password' | 'verify-email'
 export function FirebaseAuthPage() {
   const [currentView, setCurrentView] = useState<AuthView>('login')
   const [verificationEmail, setVerificationEmail] = useState('')
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [isLeftAnimating, setIsLeftAnimating] = useState(false)
+  const [isRightAnimating, setIsRightAnimating] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
 
-  // Trigger entrance animation on mount
+  // Trigger entrance animation on mount (both sides)
   useEffect(() => {
-    // Small delay to ensure DOM is ready, then trigger animation
     const timer = setTimeout(() => {
-      setIsAnimating(true)
+      setIsLeftAnimating(true)
+      setIsRightAnimating(true)
+      setIsInitialLoad(false)
     }, 50)
     return () => clearTimeout(timer)
   }, [])
 
-  // Smooth transition when view changes
+  // Smooth transition when view changes (only right side)
   useEffect(() => {
-    if (isTransitioning) {
-      // First fade out
-      setIsAnimating(false)
+    if (isTransitioning && !isInitialLoad) {
+      // Only animate right side during view transitions
+      setIsRightAnimating(false)
       const timer = setTimeout(() => {
-        // Then fade back in after content change
-        setIsAnimating(true)
+        setIsRightAnimating(true)
         setIsTransitioning(false)
-      }, 300) // Longer delay for smoother transition
+      }, 300)
       return () => clearTimeout(timer)
     }
-  }, [currentView, isTransitioning])
+  }, [currentView, isTransitioning, isInitialLoad])
 
   // Custom view change handler with smooth transition
   const handleViewChange = (newView: AuthView) => {
@@ -82,7 +84,7 @@ export function FirebaseAuthPage() {
     <div className="h-screen flex overflow-hidden bg-gray-50 dark:bg-gray-900">
       {/* Left Side - Elegant Modern Showcase */}
       <div className={`hidden lg:flex lg:w-3/5 relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 transition-all duration-1000 ease-out ${
-        isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+        isLeftAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
       }`}>
         {/* Subtle Static Background Elements */}
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-purple-600/30 to-violet-600/20"></div>
@@ -99,7 +101,7 @@ export function FirebaseAuthPage() {
         <div className="relative z-10 flex flex-col justify-center px-8 py-8 text-white h-full max-w-none">
           {/* Hero Section - Clean Layout */}
           <div className={`mb-10 transition-all duration-800 delay-200 ease-out ${
-            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            isLeftAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
           }`}>
             {/* Elegant Title */}
             <h1 className="text-6xl font-black mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
@@ -112,7 +114,7 @@ export function FirebaseAuthPage() {
 
           {/* Features Section - Moderately Taller Cards */}
           <div className={`grid grid-cols-2 gap-4 mb-8 transition-all duration-900 delay-400 ease-out ${
-            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            isLeftAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}>
             {/* Smart Analytics - Advanced */}
             <div className="relative overflow-hidden p-5 bg-gradient-to-br from-white/10 via-white/8 to-white/5 backdrop-blur-md rounded-xl border border-white/20 hover:border-blue-400/30 hover:bg-white/15 transition-all duration-500 group">
@@ -265,7 +267,7 @@ export function FirebaseAuthPage() {
 
           {/* Stats Section - Tight Fit */}
           <div className={`flex justify-center gap-6 mb-6 transition-all duration-700 delay-600 ease-out ${
-            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+            isLeftAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
           }`}>
             <div className="text-center px-3 py-2">
               <div className="text-xl font-black bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">50K+</div>
@@ -286,7 +288,7 @@ export function FirebaseAuthPage() {
 
           {/* Bottom CTA Section */}
           <div className={`text-center transition-all duration-600 delay-800 ease-out ${
-            isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            isLeftAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
           }`}>
             <p className="text-white/60 text-sm">
               Join thousands of users who have transformed their lives with Elevate
@@ -297,7 +299,7 @@ export function FirebaseAuthPage() {
 
       {/* Right Side - Ultra Creative Artistic Background */}
       <div className={`w-full lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-100 dark:from-gray-900 dark:via-indigo-900 dark:to-purple-900 transition-all duration-1200 ease-out ${
-        isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+        isRightAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
       }`}>
         {/* Sophisticated Multi-layered Background Design */}
         <div className="absolute inset-0">
@@ -355,14 +357,14 @@ export function FirebaseAuthPage() {
           <div className="w-full max-w-4xl px-8 lg:px-16">
             {/* Auth Form - Centered */}
             <div className={`flex items-center justify-center min-h-full transition-all duration-1000 delay-300 ease-out ${
-              isAnimating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
+              isRightAnimating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
             }`}>
               {renderAuthForm()}
             </div>
             
             {/* Trust Indicators */}
             <div className={`hidden lg:flex items-center justify-center gap-8 mt-8 text-sm text-gray-500 dark:text-gray-400 transition-all duration-700 delay-700 ease-out ${
-              isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+              isRightAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
             }`}>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
