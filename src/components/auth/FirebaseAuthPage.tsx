@@ -431,11 +431,55 @@ export function FirebaseAuthPage() {
         {/* Content Container */}
         <div className="relative z-10 flex items-center justify-center min-h-full">
           <div className="w-full max-w-4xl px-8 lg:px-16">
-            {/* Auth Form - Centered */}
+            {/* Auth Form - Elegant Modern Container */}
             <div className={`flex items-center justify-center min-h-full transition-all duration-1200 delay-400 ease-in-out ${
               isRightAnimating ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
             }`}>
-              {renderAuthForm()}
+              <div className="relative w-full max-w-md">
+                {/* Elegant Background Effects */}
+                <div className="absolute inset-0 -m-4">
+                  {/* Primary Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-blue-50/30 to-purple-50/25 dark:from-white/5 dark:via-blue-900/20 dark:to-purple-900/15 rounded-3xl blur-xl"></div>
+                  
+                  {/* Secondary Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-tl from-cyan-50/25 via-violet-50/20 to-pink-50/30 dark:from-cyan-900/15 dark:via-violet-900/10 dark:to-pink-900/20 rounded-3xl blur-lg"></div>
+                  
+                  {/* Accent Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-100/15 via-purple-100/25 to-indigo-100/20 dark:from-blue-800/10 dark:via-purple-800/15 dark:to-indigo-800/12 rounded-2xl blur-md"></div>
+                </div>
+
+                {/* Elegant Glass Container */}
+                <div className="relative backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 rounded-2xl border border-white/30 dark:border-gray-700/30 shadow-2xl overflow-hidden" style={{
+                  boxShadow: '0 32px 64px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+                }}>
+                  {/* Subtle Inner Glow */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-blue-50/5 dark:from-white/5 dark:via-transparent dark:to-blue-900/10 rounded-2xl"></div>
+                  
+                  {/* Elegant Border Gradient */}
+                  <div className="absolute inset-0 rounded-2xl" style={{
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.1) 100%)',
+                    padding: '1px'
+                  }}>
+                    <div className="w-full h-full bg-white/80 dark:bg-gray-900/80 rounded-2xl"></div>
+                  </div>
+
+                  {/* Floating Accent Elements */}
+                  <div className="absolute top-4 right-4 w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full opacity-60 animate-pulse"></div>
+                  <div className="absolute top-6 right-8 w-1 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-40 animate-ping"></div>
+                  <div className="absolute bottom-4 left-4 w-1.5 h-1.5 bg-gradient-to-r from-violet-400 to-indigo-400 rounded-full opacity-50 animate-bounce"></div>
+
+                  {/* Content Wrapper */}
+                  <div className="relative z-10 p-1">
+                    {renderAuthForm()}
+                  </div>
+                </div>
+
+                {/* Elegant Floating Particles */}
+                <div className="absolute -top-8 -left-8 w-4 h-4 bg-gradient-to-br from-blue-300/40 to-cyan-300/60 rounded-full blur-sm animate-bounce opacity-70" style={{ animationDelay: '0s', animationDuration: '3s' }}></div>
+                <div className="absolute -top-4 -right-6 w-3 h-3 bg-gradient-to-br from-purple-300/50 to-pink-300/70 rounded-full blur-sm animate-ping opacity-60" style={{ animationDelay: '1s', animationDuration: '4s' }}></div>
+                <div className="absolute -bottom-6 -right-8 w-2 h-2 bg-gradient-to-br from-violet-300/60 to-indigo-300/80 rounded-full blur-sm animate-pulse opacity-80" style={{ animationDelay: '2s', animationDuration: '2.5s' }}></div>
+                <div className="absolute -bottom-4 -left-6 w-3 h-3 bg-gradient-to-br from-emerald-300/40 to-teal-300/60 rounded-full blur-sm animate-bounce opacity-50" style={{ animationDelay: '0.5s', animationDuration: '3.5s' }}></div>
+              </div>
             </div>
             
             {/* Trust Indicators */}
